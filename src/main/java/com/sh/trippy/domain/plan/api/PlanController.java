@@ -13,7 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@Tag(name = "Trip Paln Controller", description = "Trip Plan API")
+@Tag(name = "Trip Plan Controller", description = "Trip Plan API")
 @Slf4j
 @RestController
 @RequiredArgsConstructor
