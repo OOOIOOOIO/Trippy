@@ -1,7 +1,7 @@
 package com.sh.trippy.global.resolver.token.reissue;
 
-import com.sh.year.global.jwt.JwtClaimDto;
-import com.sh.year.global.jwt.JwtUtils;
+import com.sh.trippy.global.jwt.JwtClaimDto;
+import com.sh.trippy.global.jwt.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

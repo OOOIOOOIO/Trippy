@@ -3,9 +3,7 @@ package com.sh.trippy.domain.user.application;
 
 import com.sh.trippy.domain.user.api.dto.UserInfoResDto;
 import com.sh.trippy.domain.user.api.dto.UserInfoUpdateReqDto;
-import com.sh.trippy.domain.user.domain.Role;
 import com.sh.trippy.domain.user.domain.Users;
-import com.sh.trippy.domain.user.domain.repository.UsersQueryRepositoryImpl;
 import com.sh.trippy.domain.user.domain.repository.UsersRepository;
 import com.sh.trippy.global.exception.CustomErrorCode;
 import com.sh.trippy.global.exception.CustomException;
@@ -31,7 +29,6 @@ import java.util.Optional;
 public class UsersService {
 
     private final UsersRepository usersRepository;
-    private final UsersQueryRepositoryImpl usersQueryRepository;
 
     @Value("${file.path}")
     private String filePath;
@@ -104,13 +101,13 @@ public class UsersService {
     }
 
 
-    public int isUserExist(UserInfoFromHeaderDto userInfoFromHeaderDto) {
-        if(usersQueryRepository.findByEmailAndProvider(userInfoFromHeaderDto.getEmail(), userInfoFromHeaderDto.getProvider()).isEmpty()){
-            return 0;
-        }
-
-        return 1;
-    }
+//    public int isUserExist(UserInfoFromHeaderDto userInfoFromHeaderDto) {
+//        if(usersQueryRepository.findByEmailAndProvider(userInfoFromHeaderDto.getEmail(), userInfoFromHeaderDto.getProvider()).isEmpty()){
+//            return 0;
+//        }
+//
+//        return 1;
+//    }
 
 
 //    public Long isUserExist(KakaoUserInfoResDto kakaoUserInfoResDto) {

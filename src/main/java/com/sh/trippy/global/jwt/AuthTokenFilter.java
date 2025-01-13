@@ -62,11 +62,15 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 "/swagger-ui/swagger-initializer.js",
                 "/swagger-ui/swagger-ui-standalone-preset.js",
                 "/swagger-ui/swagger-ui-bundle.js",
+                "/swagger-ui/swagger-ui.css.map",
+                "/swagger-ui/swagger-ui-bundle.js.map",
+                "/swagger-ui/swagger-ui-standalone-preset.js.map",
                 "/swagger-ui/index.css",
                 "/swagger-ui/swagger-ui.css",
                 "/api-docs/swagger-config",
-                "/api-docs/YEAR%20API",
+                "/api-docs/Trippy%20API",
                 "/error"
+//                "Request Path"
 
 
         };

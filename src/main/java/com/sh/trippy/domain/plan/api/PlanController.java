@@ -29,7 +29,7 @@ public class PlanController {
             description = "해당 일자의 여행 게획 조회 성공 후, 여행 계획 리스트로 리턴"
     )
     @LogTrace
-    @PostMapping("/{tripId}/plan/{planDate}")
+    @GetMapping("/{tripId}/plan/{planDate}")
     public String getTripPlan(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
 
@@ -53,6 +53,7 @@ public class PlanController {
         return "success";
     }
 
+
     @Operation(
             summary = "여행 계획 수정 API",
             description = "여행에 대한 계획 수정"
@@ -68,6 +69,7 @@ public class PlanController {
 
         return "success";
     }
+
 
     @Operation(
             summary = "여행 계획 삭제 API",

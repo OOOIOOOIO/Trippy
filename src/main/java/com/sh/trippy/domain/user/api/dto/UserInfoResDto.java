@@ -12,16 +12,12 @@ public class UserInfoResDto {
     private String email;
     private String nickname;
     private String provider;
-    private String instagramAccount;
-    private String stateMessage;
     private UrlResource profileImg;
 
     public UserInfoResDto(Users users, UrlResource profileImg) {
         this.email = users.getEmail();
         this.nickname = users.getNickname();
         this.provider = users.getProvider();
-        this.instagramAccount = users.getInstagramAccount();
-        this.stateMessage = users.getStateMessage();
         this.profileImg = profileImg;
     }
 

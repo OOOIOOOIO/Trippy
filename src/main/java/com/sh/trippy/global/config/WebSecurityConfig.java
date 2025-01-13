@@ -1,11 +1,11 @@
 package com.sh.trippy.global.config;
 
-import com.sh.year.api.jwt.application.TokenService;
-import com.sh.year.global.jwt.AuthEntryPointJwt;
-import com.sh.year.global.jwt.AuthTokenFilter;
-import com.sh.year.global.jwt.JwtExceptionHandlerFilter;
-import com.sh.year.global.jwt.JwtUtils;
-import com.sh.year.global.security.CustomUserDetailsService;
+import com.sh.trippy.api.jwt.application.TokenService;
+import com.sh.trippy.global.jwt.AuthEntryPointJwt;
+import com.sh.trippy.global.jwt.AuthTokenFilter;
+import com.sh.trippy.global.jwt.JwtExceptionHandlerFilter;
+import com.sh.trippy.global.jwt.JwtUtils;
+import com.sh.trippy.global.security.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -76,6 +76,7 @@ public class WebSecurityConfig {  // extends WebSecurityConfigurerAdapte, Spring
                                 .requestMatchers("/api-docs/**").permitAll()
 //                                .requestMatchers(new AntPathRequestMatcher("/api/token/**")).permitAll()
                                 .requestMatchers("/error/**").permitAll()
+//                                .requestMatchers("Request Path").permitAll()
                                 .anyRequest().authenticated()
                 )
 

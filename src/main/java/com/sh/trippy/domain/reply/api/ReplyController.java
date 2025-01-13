@@ -21,11 +21,11 @@ public class ReplyController {
 
     @Operation(
             summary = "여행에 대한 댓글 조회 API",
-            description = "여행에 대한 댓글 리스트로 조회"
+            description = "여행에 대한 조회 생성"
     )
     @ApiResponse(
             responseCode = "200",
-            description = "여행에 대해 댓글 조회 성공 후, 댓글 정보 리스트로 리턴"
+            description = "여행에 대해 댓글 조회 성공 후, 댓글 리스트로 리턴"
     )
     @LogTrace
     @GetMapping("/{tripId}/reply")
@@ -52,6 +52,7 @@ public class ReplyController {
         return "success";
     }
 
+
     @Operation(
             summary = "여행에 대한 댓글 수정 API",
             description = "여행에 대한 수정 생성"
@@ -67,6 +68,7 @@ public class ReplyController {
 
         return "success";
     }
+
 
     @Operation(
             summary = "여행에 대한 댓글 삭제 API",

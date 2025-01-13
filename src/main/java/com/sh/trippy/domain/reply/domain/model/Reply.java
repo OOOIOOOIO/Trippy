@@ -23,6 +23,6 @@ public class Reply extends BaseTimeEntity {
     private Users users;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "users")
+    @JoinColumn(name = "trip")
     private Trip trip;
 }

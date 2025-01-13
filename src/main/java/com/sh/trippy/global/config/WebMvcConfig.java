@@ -1,7 +1,7 @@
 package com.sh.trippy.global.config;
 
-import com.sh.year.global.resolver.token.reissue.TokenForReIssueFromHeaderArgumentResolver;
-import com.sh.year.global.resolver.token.userinfo.UserInfoFromHeaderArgumentResolver;
+import com.sh.trippy.global.resolver.token.reissue.TokenForReIssueFromHeaderArgumentResolver;
+import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeaderArgumentResolver;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

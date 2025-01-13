@@ -29,7 +29,7 @@ public class TripController {
             description = "여행 상세 조회 성공 후, 여행 정보에 대해 리턴"
     )
     @LogTrace
-    @PostMapping("")
+    @GetMapping("")
     public ResponseEntity<UserInfoResDto> getTripInfo(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
 
@@ -63,7 +63,7 @@ public class TripController {
             description = "여행 정보 수정 후, success(String) 리턴"
     )
     @LogTrace
-    @PostMapping("")
+    @PutMapping("/{tripId}")
     public String updateTrip(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
 
@@ -79,7 +79,7 @@ public class TripController {
             description = "여행 삭제 후, success(String) 리턴"
     )
     @LogTrace
-    @PostMapping("")
+    @DeleteMapping("/{tripId}")
     public String deleteTrip(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
 

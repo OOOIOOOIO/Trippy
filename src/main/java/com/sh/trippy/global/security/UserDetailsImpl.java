@@ -1,7 +1,7 @@
 package com.sh.trippy.global.security;
 
-import com.sh.year.domain.user.domain.Role;
-import com.sh.year.domain.user.domain.Users;
+import com.sh.trippy.domain.user.domain.Role;
+import com.sh.trippy.domain.user.domain.Users;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

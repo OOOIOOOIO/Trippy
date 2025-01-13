@@ -5,6 +5,7 @@ import com.sh.trippy.domain.plan.domain.model.Plan;
 import com.sh.trippy.domain.reply.domain.model.Reply;
 import com.sh.trippy.domain.sharechecklist.domain.model.ShareChecklist;
 import com.sh.trippy.domain.tripcompanion.domain.model.TripCompanion;
+import com.sh.trippy.domain.tripinvitaion.domain.model.TripInvitation;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -38,6 +39,9 @@ public class Trip extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "trip", cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private List<TripCompanion> tripCompanionList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "trip", cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private List<TripInvitation> tripInvitationList = new ArrayList<>();
 
     @OneToOne(mappedBy = "trip", cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private ShareChecklist shareChecklist;

@@ -1,8 +1,6 @@
 package com.sh.trippy.global.security;
 
 
-import com.sh.trippy.domain.user.domain.Users;
-import com.sh.trippy.domain.user.domain.repository.UsersQueryRepositoryImpl;
 import com.sh.trippy.domain.user.domain.repository.UsersRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class CustomUserDetailsService {
 
     private final UsersRepository userRepository;
-    private final UsersQueryRepositoryImpl usersQueryRepository;
 
     @Transactional
     public UserDetails loadUserByUsernameAndProvider(String email, String provider) throws UsernameNotFoundException {

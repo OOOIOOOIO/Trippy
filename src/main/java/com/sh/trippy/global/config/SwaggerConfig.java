@@ -8,9 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @OpenAPIDefinition(
-        info = @Info(title = "YEAR API 명세서",
-                description = "YEAR API 명세서",
-                version = "v1"))
+        info = @Info(title = "Trippy API 명세서",
+                description = "Trippy API 명세서",
+                version = "v0.0.1"))
 @RequiredArgsConstructor
 @Configuration
 public class SwaggerConfig {
@@ -22,7 +22,7 @@ public class SwaggerConfig {
         String[] paths = {"/api/**"};
 
         return GroupedOpenApi.builder()
-                .group("YEAR API") // 그룹 이름을 설정한다.
+                .group("Trippy API") // 그룹 이름을 설정한다.
                 .pathsToMatch(paths) // 그룹에 속하는 경로 패턴을 지정한다.
                 .build();
     }

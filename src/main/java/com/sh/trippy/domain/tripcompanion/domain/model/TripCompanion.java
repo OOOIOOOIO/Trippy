@@ -17,7 +17,8 @@ public class TripCompanion extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long companionId;
-    private String stuff;
+    @Enumerated(EnumType.STRING)
+    private TripRole tripRole;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "trip")
@@ -27,4 +28,5 @@ public class TripCompanion extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users")
     private Users users;
+
 }
