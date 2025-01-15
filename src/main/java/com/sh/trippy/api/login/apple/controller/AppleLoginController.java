@@ -1,5 +1,7 @@
-package com.sh.trippy.api.login.controller;
+package com.sh.trippy.api.login.apple.controller;
 
+import com.sh.trippy.api.login.apple.application.AppleLoginService;
+import com.sh.trippy.api.login.apple.controller.dto.AppleUserInfoResponseDto;
 import com.sh.trippy.global.log.LogTrace;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -8,7 +10,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 @Tag(name = "Apple Login API", description = "애플 로그인 관련 API")
 @Slf4j
@@ -16,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/api/apple")
 public class AppleLoginController {
+
+    private final AppleLoginService appleLoginService;
 
     @Operation(
             summary = "애플 계정 회원가입/로그인 API",
@@ -27,7 +34,9 @@ public class AppleLoginController {
     )
     @LogTrace
     @PostMapping("/login")
-    public String appleLogin(){
+    public String appleLogin(@RequestParam(name = "authorizationCode") String authorizationCode) throws IOException {
+
+        AppleUserInfoResponseDto appleUserProfile = appleLoginService.appleLogin(authorizationCode);
 
         return "success";
     }

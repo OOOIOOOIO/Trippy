@@ -1,8 +1,8 @@
 package com.sh.trippy.global.util.apple;
 
-import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.sh.trippy.global.config.RestTemplateConfig;
+import com.sh.trippy.api.login.apple.controller.dto.AppleSocialTokenInfoResponseDto;
+import com.sh.trippy.api.login.apple.controller.dto.AppleUserInfoResponseDto;
 import io.jsonwebtoken.JwsHeader;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -26,7 +26,6 @@ import java.util.Date;
 import java.util.Objects;
 
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
-import static org.springframework.security.config.Elements.JWT;
 
 @Slf4j
 @Service

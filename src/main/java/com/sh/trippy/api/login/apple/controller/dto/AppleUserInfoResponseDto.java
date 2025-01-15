@@ -1,4 +1,4 @@
-package com.sh.trippy.global.util.apple;
+package com.sh.trippy.api.login.apple.controller.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;

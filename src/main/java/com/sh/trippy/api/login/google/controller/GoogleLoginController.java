@@ -1,4 +1,4 @@
-package com.sh.trippy.api.login.controller;
+package com.sh.trippy.api.login.google.controller;
 
 import com.sh.trippy.global.log.LogTrace;
 import io.swagger.v3.oas.annotations.Operation;
