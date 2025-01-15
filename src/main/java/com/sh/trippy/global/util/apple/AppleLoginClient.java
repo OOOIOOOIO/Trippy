@@ -65,12 +65,11 @@ public class AppleLoginClient {
 
         DecodedJWT decodedJWT = com.auth0.jwt.JWT.decode(Objects.requireNonNull(response.getBody()).getIdToken());
 
-        AppleUserInfoResponseDto appleUserInfoResponseDto = new AppleUserInfoResponseDto();
+        String refreshToken = com.auth0.jwt.JWT.decode(Objects.requireNonNull(response.getBody()).getRefreshToken()).getClaim("refresh_token").asString();
+        String subject = decodedJWT.getClaim("sub").asString();
+        String email = decodedJWT.getClaim("email").asString();
 
-        appleUserInfoResponseDto.setSubject(decodedJWT.getClaim("sub").asString());
-        appleUserInfoResponseDto.setEmail(decodedJWT.getClaim("email").asString());
-
-        // refreshToken DB 저장 로직 개발하기
+        AppleUserInfoResponseDto appleUserInfoResponseDto = new AppleUserInfoResponseDto(subject, email, refreshToken, "apple");
 
         return appleUserInfoResponseDto;
     }

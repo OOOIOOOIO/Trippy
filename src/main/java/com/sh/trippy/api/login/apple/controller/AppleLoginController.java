@@ -36,7 +36,7 @@ public class AppleLoginController {
     @PostMapping("/login")
     public String appleLogin(@RequestParam(name = "authorizationCode") String authorizationCode) throws IOException {
 
-        AppleUserInfoResponseDto appleUserProfile = appleLoginService.appleLogin(authorizationCode);
+        Long userId = appleLoginService.appleLogin(authorizationCode);
 
         return "success";
     }
