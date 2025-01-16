@@ -65,6 +65,28 @@ public class UsersController {
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
 
+
+    @Operation(
+            summary = "마이페이지 프로필 처음 저장 API",
+            description = "마이페이지에서 프로필 처음 저장"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "마이페이지 프로필 저장에 성공 후, success(String) 리턴"
+    )
+    @LogTrace
+    @PostMapping("")
+    public ResponseEntity<String> saveMypageProfile(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto,
+                                                      @RequestParam("nickname") String nickname,
+                                                      @RequestParam("motherLand") String motherLand,
+                                                      @RequestPart(required = false) MultipartFile file){
+
+        usersService.saveUserInfo(userInfoFromHeaderDto.getUserId(), nickname, motherLand, file);
+
+        return new ResponseEntity<>("success", HttpStatus.OK);
+    }
+
+
     @Operation(
             summary = "마이페이지 프로필 수정 API",
             description = "마이페이지에서 프로필 수정"
@@ -75,11 +97,14 @@ public class UsersController {
     )
     @LogTrace
     @PutMapping("")
-    public String updateMypageProfile(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+    public ResponseEntity<String> updateMypageProfile(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto,
+                                                      @RequestParam("nickname") String nickname,
+                                                      @RequestParam("motherLand") String motherLand,
+                                                      @RequestPart(required = false) MultipartFile file){
 
-        UserInfoResDto userInfo = usersService.getUserInfo(userInfoFromHeaderDto.getUserId());
+        usersService.updateUserInfo(userInfoFromHeaderDto.getUserId(), nickname, motherLand, file);
 
-        return "success";
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
 
@@ -93,11 +118,11 @@ public class UsersController {
     )
     @LogTrace
     @DeleteMapping("")
-    public String cancelAccount(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+    public ResponseEntity<String> cancelAccount(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
         UserInfoResDto userInfo = usersService.getUserInfo(userInfoFromHeaderDto.getUserId());
 
-        return "success";
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
 
@@ -111,18 +136,18 @@ public class UsersController {
     )
     @LogTrace
     @PatchMapping("/paidversion")
-    public String purchasePaidVersion(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+    public ResponseEntity<String> purchasePaidVersion(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
         UserInfoResDto userInfo = usersService.getUserInfo(userInfoFromHeaderDto.getUserId());
 
-        return "success";
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
 
 
-//    /**
-//     * 유저 유무 확인
-//     */
+    /**
+     * 기존 유저인지 확인
+     */
 //    @Operation(
 //            summary = "유저가 존재하는지 확인하는 API",
 //            description = "닉네임을 통해 유저 존재 유무 확인 "

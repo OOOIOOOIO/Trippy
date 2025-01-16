@@ -65,13 +65,12 @@ public class WebSecurityConfig {  // extends WebSecurityConfigurerAdapte, Spring
                 )
                 .authorizeHttpRequests(authorizeRequest ->
                         authorizeRequest
-                                .requestMatchers("/api/test/**").permitAll()
-                                .requestMatchers("/api/login/**").permitAll()
+                                .requestMatchers("/api/test").permitAll()
+                                .requestMatchers("/api/apple/**").permitAll()
+                                .requestMatchers("/api/google/**").permitAll()
                                 .requestMatchers("/api/token/reissue/**").permitAll()
                                 .requestMatchers("/login/oauth2/code/**").permitAll()
                                 .requestMatchers("/login/oauth2/redirect/**").permitAll()
-                                .requestMatchers("/login/**").permitAll()
-                                .requestMatchers("/test/**").permitAll()
                                 .requestMatchers("/favicon.ico").permitAll()
                                 .requestMatchers("/swagger-ui/**").permitAll()
                                 .requestMatchers("/api-docs/**").permitAll()

@@ -51,11 +51,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         String[] excludePath = {
                 "/api/test",
-                "/api/login/kakao",
+                "/api/apple/login",
+                "/api/apple/logout",
+                "/api/google/login",
+                "/api/google/logout",
                 "/api/token/reissue/access",
                 "/api/token/reissue/refresh",
                 "/login/oauth2/redirect",
-                "/test/login",
                 "/favicon.ico",
                 "/swagger-ui/index.html",
                 "/swagger-ui/favicon-16x16.png",
@@ -71,7 +73,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 "/api-docs/swagger-config",
                 "/api-docs/Trippy%20API",
                 "/error"
-//                "Request Path"
 
 
         };
