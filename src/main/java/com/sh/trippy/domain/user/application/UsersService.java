@@ -118,7 +118,10 @@ public class UsersService {
 //    }
 
     /**
+<<<<<<< HEAD
      * 회원 정보 수정, 로컬에 이미지 저장
+=======
+>>>>>>> origin/main
      * Apple 회원 저장
      * @param appleUserInfoResponseDto
      */
@@ -137,11 +140,12 @@ public class UsersService {
     }
 
 
-    /**
-     * 회원 정보 수정
->>>>>>> feature/apple
-     * imgFileName = userId + @ + originalFileName
-     */
+
+//    /**
+//     * 회원 정보 수정
+//     * 회원 정보 수정, 로컬에 이미지 저장
+//     * imgFileName = userId + @ + originalFileName
+//     */
 //    public void updateUserInfo(Long userId, String nickname, String motherLand, MultipartFile file) {
 //        Users users = usersRepository.findById(userId).orElseThrow(() -> new CustomException(CustomErrorCode.UserNotFoundException));
 //        String newFileName = null;
