@@ -43,6 +43,8 @@ public class QUsers extends EntityPathBase<Users> {
 
     public final DatePath<java.time.LocalDate> purchasedAt = createDate("purchasedAt", java.time.LocalDate.class);
 
+    public final StringPath refreshToken = createString("refreshToken");
+
     public final ListPath<com.sh.trippy.domain.reply.domain.model.Reply, com.sh.trippy.domain.reply.domain.model.QReply> replyList = this.<com.sh.trippy.domain.reply.domain.model.Reply, com.sh.trippy.domain.reply.domain.model.QReply>createList("replyList", com.sh.trippy.domain.reply.domain.model.Reply.class, com.sh.trippy.domain.reply.domain.model.QReply.class, PathInits.DIRECT2);
 
     public final EnumPath<Role> role = createEnum("role", Role.class);

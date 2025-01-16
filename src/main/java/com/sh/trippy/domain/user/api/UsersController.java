@@ -25,6 +25,29 @@ public class UsersController {
 
     private final UsersService usersService;
 
+    /**
+     * 기존 유저인지 확인
+     * 로그인, 회원가입 > 기존 유저 확인 > 마이페이지 설정(NO) or home화면(YES)
+     * @param userInfoFromHeaderDto
+     * @return
+     */
+    @Operation(
+            summary = "로그인/회원가입 후 기존 유저 확인 API",
+            description = "로그인/회원가입 후 기존 유저 확인"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "기존 유저인지 확인하고, 기존 유저면 1, 신규 유저면 0 리턴"
+    )
+    @LogTrace
+    @GetMapping("/check")
+    public ResponseEntity<Integer> checkExistUser(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+
+        UserInfoResDto userInfo = usersService.getUserInfo(userInfoFromHeaderDto.getUserId());
+
+        return new ResponseEntity<>(0, HttpStatus.OK);
+    }
+
     @Operation(
             summary = "마이페이지 회원 정보 조회 API",
             description = "마이페이지에서 회원 정보 조회"

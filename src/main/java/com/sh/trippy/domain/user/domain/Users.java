@@ -27,11 +27,12 @@ public class Users extends BaseTimeEntity {
     private Long userId;
     @NotNull
     private String email;
-    private String profileImg;
+    private String profileImg; // mypage에서 따로 업데이트
     @NotNull
     private String provider;
-    private String nickname;
-    private String motherLand;
+    private String refreshToken; // apple 로그인할 때만
+    private String nickname; // 우선 랜덤, 그 후에 mypage에서 따로 업데이트
+    private String motherLand; // mypage에서 따로 업데이트
     @NotNull
     private boolean paidFlag;
     private LocalDate purchasedAt;
@@ -54,9 +55,13 @@ public class Users extends BaseTimeEntity {
 
 
     @Builder
-    public Users(String email, String provider, boolean paidFlag, Role role) {
+    public Users(String email, String refreshToken, String provider, String  nickname, boolean paidFlag, Role role) {
         this.email = email;
+        this.profileImg = null;
+        this.refreshToken = refreshToken;
         this.provider = provider;
+        this.nickname = nickname;
+        this.motherLand = null;
         this.paidFlag = paidFlag;
         this.purchasedAt = null;
         this.role = role;
@@ -88,16 +93,18 @@ public class Users extends BaseTimeEntity {
     /**
      * user 생성
      */
-    public static Users createUser(String email, String provider, Role role){
+    public static Users createUser(String email, String refreshToken, String nickname, String provider, Role role){
         return Users.builder()
                 .email(email)
+                .refreshToken(refreshToken)
                 .provider(provider)
+                .nickname(nickname)
                 .paidFlag(false) // 기본 요금제: false
                 .role(role)
                 .build();
     }
 
-    public Users update(String email, String picture, String provider){
+    public Users updateLoginInfo(String email, String picture, String provider){
         this.email = email;
         this.provider = provider;
 

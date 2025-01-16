@@ -12,6 +12,7 @@ import org.bouncycastle.asn1.pkcs.PrivateKeyInfo;
 import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
@@ -28,15 +29,13 @@ import java.util.Objects;
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED_VALUE;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
-@Transactional
 public class AppleLoginClient {
 
     private final RestTemplate restTemplate;
     private static final String TOKEN_BASE_URL = "https://appleid.apple.com";
     private static final String GRANT_TYPE = "authorization_code";
-    private static final String PROVIDER = "kakao";
 
     @Value("${apple.team-id}")
     private String teamId;
@@ -65,12 +64,11 @@ public class AppleLoginClient {
 
         DecodedJWT decodedJWT = com.auth0.jwt.JWT.decode(Objects.requireNonNull(response.getBody()).getIdToken());
 
-        AppleUserInfoResponseDto appleUserInfoResponseDto = new AppleUserInfoResponseDto();
+        String refreshToken = com.auth0.jwt.JWT.decode(Objects.requireNonNull(response.getBody()).getRefreshToken()).getClaim("refresh_token").asString();
+        String subject = decodedJWT.getClaim("sub").asString();
+        String email = decodedJWT.getClaim("email").asString();
 
-        appleUserInfoResponseDto.setSubject(decodedJWT.getClaim("sub").asString());
-        appleUserInfoResponseDto.setEmail(decodedJWT.getClaim("email").asString());
-
-        // refreshToken DB 저장 로직 개발하기
+        AppleUserInfoResponseDto appleUserInfoResponseDto = new AppleUserInfoResponseDto(subject, email, refreshToken, "apple");
 
         return appleUserInfoResponseDto;
     }

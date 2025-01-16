@@ -9,17 +9,20 @@ import lombok.Setter;
 
 @NoArgsConstructor
 @Getter
-@Setter
 public class AppleUserInfoResponseDto {
-    @JsonProperty("sub")
+//    @JsonProperty("sub")
     private String subject;
 
-    @JsonProperty("email")
+//    @JsonProperty("email")
     private String email;
+    private String refreshToken;
+    private String provider;
 
     @Builder
-    public AppleUserInfoResponseDto(String subject, String email) {
+    public AppleUserInfoResponseDto(String subject, String email, String refreshToken, String provider) {
         this.subject = subject;
         this.email = email;
+        this.refreshToken = refreshToken;
+        this.provider = provider;
     }
 }

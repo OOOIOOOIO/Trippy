@@ -1,8 +1,10 @@
 package com.sh.trippy.domain.user.application;
 
 
+import com.sh.trippy.api.login.apple.controller.dto.AppleUserInfoResponseDto;
 import com.sh.trippy.domain.user.api.dto.UserInfoResDto;
 import com.sh.trippy.domain.user.api.dto.UserInfoUpdateReqDto;
+import com.sh.trippy.domain.user.domain.Role;
 import com.sh.trippy.domain.user.domain.Users;
 import com.sh.trippy.domain.user.domain.repository.UsersRepository;
 import com.sh.trippy.global.exception.CustomErrorCode;
@@ -22,6 +24,8 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
 
 
 @Slf4j
@@ -115,6 +119,27 @@ public class UsersService {
 
     /**
      * 회원 정보 수정, 로컬에 이미지 저장
+     * Apple 회원 저장
+     * @param appleUserInfoResponseDto
+     */
+    public Long saveAppleUser(AppleUserInfoResponseDto appleUserInfoResponseDto) {
+        String nickname = generateNickname();
+        Users user = Users.createUser(appleUserInfoResponseDto.getEmail(),
+                appleUserInfoResponseDto.getRefreshToken(),
+                appleUserInfoResponseDto.getProvider(),
+                nickname,
+                Role.USER);
+
+        Users savedUser = usersRepository.save(user);
+
+        return savedUser.getUserId();
+
+    }
+
+
+    /**
+     * 회원 정보 수정
+>>>>>>> feature/apple
      * imgFileName = userId + @ + originalFileName
      */
 //    public void updateUserInfo(Long userId, String nickname, String motherLand, MultipartFile file) {
@@ -207,7 +232,16 @@ public class UsersService {
         return profileImg;
     }
 
+    /**
+     * 초기 닉네임 : uuid + 랜덤 1자리 정수
+     * @return 랜덤 uuid
+     */
+    private String generateNickname(){
 
+        String uuid = UUID.randomUUID().toString().substring(10) + (int)(Math.random() * 10);
+
+        return uuid;
+    }
 
 
 }

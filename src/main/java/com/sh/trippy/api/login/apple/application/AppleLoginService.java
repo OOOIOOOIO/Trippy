@@ -1,6 +1,7 @@
 package com.sh.trippy.api.login.apple.application;
 
 import com.sh.trippy.api.login.apple.controller.dto.AppleUserInfoResponseDto;
+import com.sh.trippy.domain.user.application.UsersService;
 import com.sh.trippy.global.log.LogTrace;
 import com.sh.trippy.global.util.apple.AppleLoginClient;
 import lombok.RequiredArgsConstructor;
@@ -13,18 +14,21 @@ import java.io.IOException;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class AppleLoginService {
 
     private final AppleLoginClient appleLoginClient;
+    private final UsersService usersService;
 
     @LogTrace
-    @Transactional
-    public AppleUserInfoResponseDto appleLogin(@RequestParam(name = "authorizationCode") String authorizationCode) throws IOException {
+    public Long appleLogin(@RequestParam(name = "authorizationCode") String authorizationCode) throws IOException {
 
-        AppleUserInfoResponseDto appleUserProfile = appleLoginClient.getAppleUserProfile(authorizationCode);
+        AppleUserInfoResponseDto appleUserInfoResponseDto = appleLoginClient.getAppleUserProfile(authorizationCode);
 
-        return appleUserProfile;
+        Long userId = usersService.saveAppleUser(appleUserInfoResponseDto);
+
+        return userId;
     }
 
 
