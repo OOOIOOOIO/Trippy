@@ -7,7 +7,9 @@ import com.sh.trippy.domain.user.domain.Users;
 import com.sh.trippy.domain.user.domain.repository.UsersRepository;
 import com.sh.trippy.global.exception.CustomErrorCode;
 import com.sh.trippy.global.exception.CustomException;
+import com.sh.trippy.global.log.LogTrace;
 import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeaderDto;
+import com.sh.trippy.global.util.aws.AmazonS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,14 +31,16 @@ import java.util.Optional;
 public class UsersService {
 
     private final UsersRepository usersRepository;
+    private final AmazonS3Service amazonS3Service;
 
     @Value("${file.path}")
     private String filePath;
 
     /**
-     * 회원 정보 불러오기
+     * mypage - 회원 정보 불러오기
      *
      */
+    @LogTrace
     public UserInfoResDto getUserInfo(Long userId){
         Users users = usersRepository.findById(userId).orElseThrow(() -> new CustomException(CustomErrorCode.UserNotFoundException));
 
@@ -49,6 +53,53 @@ public class UsersService {
     }
 
 
+    /**
+     * mypage - 처음 회원 정보 저장(dirty check)
+     */
+    @LogTrace
+    public Long saveUserInfo(Long userId, String nickname, String motherLand, MultipartFile file){
+        Users users = usersRepository.findById(userId).orElseThrow(() -> new CustomException(CustomErrorCode.UserNotFoundException));
+
+        // S3에 저장
+        String profileImg = amazonS3Service.uploadFile(file);
+        log.info("===== profile img link : " + profileImg + "=====");
+
+        users.updateUserInfo(nickname, profileImg, motherLand);
+
+        return userId;
+    }
+
+    /**
+     * mypage - 회원 정보 수정(dirty check)
+     * @param userId
+     * @param nickname
+     * @param motherLand
+     * @param file
+     */
+    @LogTrace
+    public void updateUserInfo(Long userId, String nickname, String motherLand, MultipartFile file){
+        Users users = usersRepository.findById(userId).orElseThrow(() -> new CustomException(CustomErrorCode.UserNotFoundException));
+
+        String pastProfileImg = users.getProfileImg();
+
+        // S3에서 삭제
+        amazonS3Service.delete(pastProfileImg);
+
+        // S3에 저장
+        String newProfileImg = amazonS3Service.uploadFile(file);
+
+        users.updateUserInfo(nickname, newProfileImg, motherLand);
+
+    }
+
+
+    /**
+     * 기존 회원인지 확인 -> 로그인 후 호출
+     * email로 검증
+     */
+    public void isUserExist(){
+
+    }
 
 
     /**
@@ -63,42 +114,42 @@ public class UsersService {
 //    }
 
     /**
-     * 회원 정보 수정
+     * 회원 정보 수정, 로컬에 이미지 저장
      * imgFileName = userId + @ + originalFileName
      */
-    public void updateUserInfo(Long userId, UserInfoUpdateReqDto userInfoUpdateReqDto, MultipartFile file) {
-        Users users = usersRepository.findById(userId).orElseThrow(() -> new CustomException(CustomErrorCode.UserNotFoundException));
-        String newFileName = null;
-
-        // upload할 img가 있다면
-        if(file != null){
-            //만약 이미지가 존재하지 않는다면
-            if(users.getProfileImg() == null){
-                // 그냥 저장
-                newFileName = saveFile(file, userId);
-            }
-            else{
-                // local에서 img 삭제 후 저장
-                try {
-                    File prevFile = new File(filePath +"/"+ URLDecoder.decode(users.getProfileImg(), "UTF-8"));
-                    prevFile.delete();
-                }
-                catch (UnsupportedEncodingException e) {
-                    log.error("파일 삭제 에러 : " + e.getMessage());
-                }
-
-                newFileName = saveFile(file, userId);
-
-            }
-
-            log.info("==== save file name : " + newFileName);
-        }
-
-
-
-        users.updateUserInfo(userInfoUpdateReqDto, newFileName, "모국어~~~~~~~");
-
-    }
+//    public void updateUserInfo(Long userId, String nickname, String motherLand, MultipartFile file) {
+//        Users users = usersRepository.findById(userId).orElseThrow(() -> new CustomException(CustomErrorCode.UserNotFoundException));
+//        String newFileName = null;
+//
+//        // upload할 img가 있다면
+//        if(file != null){
+//            //만약 이미지가 존재하지 않는다면
+//            if(users.getProfileImg() == null){
+//                // 그냥 저장
+//                newFileName = saveFile(file, userId);
+//            }
+//            else{
+//                // local에서 img 삭제 후 저장
+//                try {
+//                    File prevFile = new File(filePath +"/"+ URLDecoder.decode(users.getProfileImg(), "UTF-8"));
+//                    prevFile.delete();
+//                }
+//                catch (UnsupportedEncodingException e) {
+//                    log.error("파일 삭제 에러 : " + e.getMessage());
+//                }
+//
+//                newFileName = saveFile(file, userId);
+//
+//            }
+//
+//            log.info("==== save file name : " + newFileName);
+//        }
+//
+//
+//
+//        users.updateUserInfo(userInfoUpdateReqDto, newFileName, "모국어~~~~~~~");
+//
+//    }
 
 
 //    public int isUserExist(UserInfoFromHeaderDto userInfoFromHeaderDto) {

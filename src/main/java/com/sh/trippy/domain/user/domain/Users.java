@@ -104,8 +104,8 @@ public class Users extends BaseTimeEntity {
         return this;
     }
 
-    public void updateUserInfo(UserInfoUpdateReqDto userInfoUpdateReqDto, String profileImg, String motherLand) {
-        this.nickname = userInfoUpdateReqDto.getNickname();
+    public void updateUserInfo(String nickname, String profileImg, String motherLand) {
+        this.nickname = nickname;
         this.profileImg = profileImg;
         this.motherLand = motherLand;
     }
