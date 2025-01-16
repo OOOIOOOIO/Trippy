@@ -50,6 +50,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
 
         String[] excludePath = {
+                "/api/test",
                 "/api/login/kakao",
                 "/api/token/reissue/access",
                 "/api/token/reissue/refresh",

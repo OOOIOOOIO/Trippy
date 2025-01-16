@@ -65,6 +65,7 @@ public class WebSecurityConfig {  // extends WebSecurityConfigurerAdapte, Spring
                 )
                 .authorizeHttpRequests(authorizeRequest ->
                         authorizeRequest
+                                .requestMatchers("/api/test/**").permitAll()
                                 .requestMatchers("/api/login/**").permitAll()
                                 .requestMatchers("/api/token/reissue/**").permitAll()
                                 .requestMatchers("/login/oauth2/code/**").permitAll()
