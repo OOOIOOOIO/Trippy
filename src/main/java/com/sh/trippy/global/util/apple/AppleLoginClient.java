@@ -54,6 +54,7 @@ public class AppleLoginClient {
     public AppleUserInfoResponseDto getAppleUserProfile(String authorizationCode) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf(APPLICATION_FORM_URLENCODED_VALUE));
+
         HttpEntity<String> request = new HttpEntity<>("client_id=" + clientId +
                 "&client_secret=" + generateClientSecret() +
                 "&grant_type=" + GRANT_TYPE +
@@ -64,9 +65,16 @@ public class AppleLoginClient {
 
         DecodedJWT decodedJWT = com.auth0.jwt.JWT.decode(Objects.requireNonNull(response.getBody()).getIdToken());
 
-        String refreshToken = com.auth0.jwt.JWT.decode(Objects.requireNonNull(response.getBody()).getRefreshToken()).getClaim("refresh_token").asString();
+        String refreshToken = response.getBody().getRefreshToken();
+
+
+        log.info("====== refreshToken : " + refreshToken);
+
         String subject = decodedJWT.getClaim("sub").asString();
         String email = decodedJWT.getClaim("email").asString();
+
+        log.info("===== sub : " + subject);
+        log.info("===== email : " + email);
 
         AppleUserInfoResponseDto appleUserInfoResponseDto = new AppleUserInfoResponseDto(subject, email, refreshToken, "apple");
 
@@ -103,6 +111,7 @@ public class AppleLoginClient {
         try {
             byte[] privateKeyBytes = Base64.getDecoder().decode(privatKey); //appleProperties.getPrivateKey()
             PrivateKeyInfo privateKeyInfo = PrivateKeyInfo.getInstance(privateKeyBytes);
+
             return converter.getPrivateKey(privateKeyInfo);
         } catch (Exception e) {
             throw new RuntimeException("Error converting private key from String", e);

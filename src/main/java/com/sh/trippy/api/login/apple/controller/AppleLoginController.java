@@ -1,14 +1,13 @@
 package com.sh.trippy.api.login.apple.controller;
 
 import com.sh.trippy.api.login.apple.application.AppleLoginService;
-import com.sh.trippy.api.login.apple.controller.dto.AppleUserInfoResponseDto;
 import com.sh.trippy.global.log.LogTrace;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-gimport org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
