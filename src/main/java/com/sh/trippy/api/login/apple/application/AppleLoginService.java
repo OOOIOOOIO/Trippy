@@ -22,13 +22,12 @@ public class AppleLoginService {
     private final UsersService usersService;
 
     @LogTrace
-    public Long appleLogin(@RequestParam(name = "authorizationCode") String authorizationCode) throws IOException {
+    public int appleLogin(@RequestParam(name = "authorizationCode") String authorizationCode) throws IOException {
 
         AppleUserInfoResponseDto appleUserInfoResponseDto = appleLoginClient.getAppleUserProfile(authorizationCode);
 
-        Long userId = usersService.saveAppleUser(appleUserInfoResponseDto);
+        return usersService.saveAppleUser(appleUserInfoResponseDto);
 
-        return userId;
     }
 
 

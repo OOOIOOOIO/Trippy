@@ -118,26 +118,53 @@ public class UsersService {
 //    }
 
     /**
-<<<<<<< HEAD
      * 회원 정보 수정, 로컬에 이미지 저장
-=======
->>>>>>> origin/main
      * Apple 회원 저장
      * @param appleUserInfoResponseDto
      */
-    public Long saveAppleUser(AppleUserInfoResponseDto appleUserInfoResponseDto) {
+    public int saveAppleUser(AppleUserInfoResponseDto appleUserInfoResponseDto) {
         String nickname = generateNickname();
-        Users user = Users.createUser(appleUserInfoResponseDto.getEmail(),
-                appleUserInfoResponseDto.getRefreshToken(),
-                appleUserInfoResponseDto.getProvider(),
-                nickname,
-                Role.USER);
 
-        Users savedUser = usersRepository.save(user);
+        if(isUserExist(appleUserInfoResponseDto.getEmail())){
+            return 1;
+        }
+        else{
+            Users user = Users.createUser(appleUserInfoResponseDto.getEmail(),
+                    appleUserInfoResponseDto.getRefreshToken(),
+                    nickname,
+                    appleUserInfoResponseDto.getProvider(),
+                    Role.USER);
 
-        return savedUser.getUserId();
+            usersRepository.save(user);
+
+            return -1;
+        }
+
+
+
 
     }
+
+    public int saveGoogleUser(String email, String provider) {
+        String nickname = generateNickname();
+
+        if(isUserExist(email)){
+            return 1;
+        }
+        else{
+            Users user = Users.createUser(email,
+                    "NONE",
+                    nickname,
+                    provider,
+                    Role.USER);
+
+            usersRepository.save(user);
+
+            return -1;
+        }
+
+    }
+
 
 
 
@@ -190,15 +217,15 @@ public class UsersService {
 //    }
 
 
-//    public Long isUserExist(KakaoUserInfoResDto kakaoUserInfoResDto) {
-//        Optional<Users> user = usersQueryRepository.findByEmailAndProvider(kakaoUserInfoResDto.getEmail(), kakaoUserInfoResDto.getProvider());
-//
-//        if(!user.isEmpty()){
-//            return user.get().getUserId();
-//        }
-//
-//        return -1L;
-//    }
+    public boolean isUserExist(String email) {
+        Optional<Users> user = usersRepository.findByEmail(email);
+
+        if(user.isEmpty()){
+            return false;
+        }
+
+        return true;
+    }
 
 
     /**

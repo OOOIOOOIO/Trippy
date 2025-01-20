@@ -13,8 +13,6 @@ import org.bouncycastle.openssl.jcajce.JcaPEMKeyConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -36,6 +34,7 @@ public class AppleLoginClient {
     private final RestTemplate restTemplate;
     private static final String TOKEN_BASE_URL = "https://appleid.apple.com";
     private static final String GRANT_TYPE = "authorization_code";
+    private static final String PROVIDER = "apple";
 
     @Value("${apple.team-id}")
     private String teamId;
@@ -76,7 +75,7 @@ public class AppleLoginClient {
         log.info("===== sub : " + subject);
         log.info("===== email : " + email);
 
-        AppleUserInfoResponseDto appleUserInfoResponseDto = new AppleUserInfoResponseDto(subject, email, refreshToken, "apple");
+        AppleUserInfoResponseDto appleUserInfoResponseDto = new AppleUserInfoResponseDto(subject, email, refreshToken, PROVIDER);
 
         return appleUserInfoResponseDto;
     }

@@ -65,7 +65,10 @@ dependencies {
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-s3:3.1.1'
 
 
-    // JCA 암호화
+    // Google json
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+    // JCA 암호화(apple)
     implementation 'org.bouncycastle:bcprov-jdk18on:1.75'
     implementation 'org.bouncycastle:bcpkix-jdk18on:1.75'
 

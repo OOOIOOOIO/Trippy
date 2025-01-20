@@ -27,19 +27,19 @@ public class AppleLoginController {
 
     @Operation(
             summary = "애플 계정 회원가입/로그인 API",
-            description = "fornt에서 코드 받아서 애플 계정으로 회원가입/로그인하기"
+            description = "fornt에서 AuthCode 받아서 애플 계정으로 회원가입/로그인하기"
     )
     @ApiResponse(
             responseCode = "200",
-            description = "애플 계정 로그인 성공 후 success(String) 리턴"
+            description = "애플 계정 로그인 성공 후 유저가 이미 존재한다면 1, 신규라면 -1 리턴"
     )
     @LogTrace
     @PostMapping("/login")
-    public ResponseEntity<String> appleLogin(@RequestParam(name = "authorizationCode") String authorizationCode) throws IOException {
+    public ResponseEntity<Integer> appleLogin(@RequestParam(name = "authorizationCode") String authorizationCode) throws IOException {
 
-        Long userId = appleLoginService.appleLogin(authorizationCode);
+        int isUserExist = appleLoginService.appleLogin(authorizationCode);
 
-        return new ResponseEntity<>("success", HttpStatus.OK);
+        return new ResponseEntity<>(isUserExist, HttpStatus.OK);
     }
 
 
