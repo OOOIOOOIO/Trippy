@@ -3,6 +3,7 @@ package com.sh.trippy.domain.user.domain;
 import com.sh.trippy.domain.common.BaseTimeEntity;
 import com.sh.trippy.domain.feedback.domain.model.Feedback;
 import com.sh.trippy.domain.reply.domain.model.Reply;
+import com.sh.trippy.domain.trip.domain.model.Trip;
 import com.sh.trippy.domain.tripcompanion.domain.model.TripCompanion;
 import com.sh.trippy.domain.user.api.dto.UserInfoUpdateReqDto;
 import com.sh.trippy.domain.tripstats.domain.model.TripStats;
@@ -40,6 +41,8 @@ public class Users extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToMany(mappedBy = "users", cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+    private List<Trip> tripList = new ArrayList<>();
     @OneToOne(mappedBy = "users", cascade = {CascadeType.REMOVE, CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
     private TripStats tripStats;
 
