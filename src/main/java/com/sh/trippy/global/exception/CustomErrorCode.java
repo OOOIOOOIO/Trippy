@@ -31,7 +31,7 @@ public enum CustomErrorCode {
     NotExistTrip(INTERNAL_SERVER_ERROR, "S004", "해당 여행이 존재하지 않습니다."),
     NotExistPlan (INTERNAL_SERVER_ERROR, "S004", "해당 계획이 존재하지 않습니다."),
     NotExistRule(INTERNAL_SERVER_ERROR, "S005", "해당 목표의 규칙이 존재하지 않습니다."),
-    NotExistGoalReview(INTERNAL_SERVER_ERROR, "S006", "해당 후기가 존재하지 않습니다."),
+    NotExistTripReply(INTERNAL_SERVER_ERROR, "S006", "해당 후기가 존재하지 않습니다."),
     NotExistDelayGoal(INTERNAL_SERVER_ERROR, "S007", "연기된 목표가 존재하지 않습니다."),
 
 

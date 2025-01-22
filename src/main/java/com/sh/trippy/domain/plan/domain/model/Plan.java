@@ -1,6 +1,9 @@
 package com.sh.trippy.domain.plan.domain.model;
 
 import com.sh.trippy.domain.common.BaseTimeEntity;
+import com.sh.trippy.domain.common.CompleteStatus;
+import com.sh.trippy.domain.plan.api.dto.req.PlanCreateReqDto;
+import com.sh.trippy.domain.plan.api.dto.req.PlanUpdateReqDto;
 import com.sh.trippy.domain.trip.domain.model.Trip;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -25,25 +28,52 @@ public class Plan extends BaseTimeEntity {
     private LocalDateTime plannedAt;
     private String memo;
     private Integer priority;
+    @Enumerated(EnumType.STRING)
+    private CompleteStatus completeStatus;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tripId")
+    private Trip trip;
 
     @Builder
-    private Plan(String title, LocalDate tripDate, String place, LocalDateTime plannedAt, String memo, Integer priority) {
+    private Plan(String title, LocalDate tripDate, String place, LocalDateTime plannedAt, String memo, Integer priority, Trip trip) {
         this.title = title;
         this.tripDate = tripDate;
         this.place = place;
         this.plannedAt = plannedAt;
         this.memo = memo;
         this.priority = priority;
+        this.trip = trip;
+        this.completeStatus = CompleteStatus.WAIT;
     }
 
-    public static Plan createPlan() {
+    public static Plan createPlan(PlanCreateReqDto planCreateReqDto, Trip trip) {
+        return Plan.builder()
+                .title(planCreateReqDto.getTitle())
+                .tripDate(planCreateReqDto.getTripDate())
+                .place(planCreateReqDto.getPlace())
+                .plannedAt(planCreateReqDto.getPlannedAt())
+                .memo(planCreateReqDto.getMemo())
+                .priority(planCreateReqDto.getPriority())
+                .trip(trip)
+                .build();
 
-        return null;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tripId")
-    private Trip trip;
+    public void updatePlan(PlanUpdateReqDto planUpdateReqDto) {
+        this.title = planUpdateReqDto.getTitle();
+        this.tripDate = planUpdateReqDto.getTripDate();
+        this.place = planUpdateReqDto.getPlace();
+        this.plannedAt = planUpdateReqDto.getPlannedAt();
+        this.memo = planUpdateReqDto.getMemo();
+        this.priority = planUpdateReqDto.getPriority();
+    }
+
+    public void updateCompleteStatus(CompleteStatus completeStatus){
+        this.completeStatus = completeStatus.equals(CompleteStatus.COMP) ? CompleteStatus.WAIT : CompleteStatus.COMP;
+    }
+
+
 
 
 }
