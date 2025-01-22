@@ -1,6 +1,8 @@
 package com.sh.trippy.domain.reply.api;
 
 
+import com.sh.trippy.domain.reply.api.dto.req.ReplyCreateReqDto;
+import com.sh.trippy.domain.reply.application.ReplyService;
 import com.sh.trippy.global.log.LogTrace;
 import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeader;
 import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeaderDto;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/trip")
 public class ReplyController {
 
+    private final ReplyService replyService;
 
     @Operation(
             summary = "여행에 대한 댓글 조회 API",
@@ -46,28 +49,30 @@ public class ReplyController {
     )
     @LogTrace
     @PostMapping("/{tripId}/reply")
-    public String createTripReply(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
-
-
-        return "success";
-    }
-
-
-    @Operation(
-            summary = "여행에 대한 댓글 수정 API",
-            description = "여행에 대한 수정 생성"
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "여행에 대해 댓글 수정 성공 후, success(String) 리턴"
-    )
-    @LogTrace
-    @PutMapping("/{tripId}/reply/{replyId}")
-    public String updateTripReply(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
-
+    public String createTripReply(@PathVariable(name = "tripId") Long tripId,
+                                  @RequestBody ReplyCreateReqDto replyCreateReqDto,
+                                  @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto) {
+        replyService.createReply(tripId, replyCreateReqDto, userInfoFromHeaderDto);
 
         return "success";
     }
+
+
+//    @Operation(
+//            summary = "여행에 대한 댓글 수정 API",
+//            description = "여행에 대한 수정 생성"
+//    )
+//    @ApiResponse(
+//            responseCode = "200",
+//            description = "여행에 대해 댓글 수정 성공 후, success(String) 리턴"
+//    )
+//    @LogTrace
+//    @PutMapping("/{tripId}/reply/{replyId}")
+//    public String updateTripReply(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+//
+//
+//        return "success";
+//    }
 
 
     @Operation(
@@ -79,9 +84,11 @@ public class ReplyController {
             description = "여행에 대해 댓글 삭제 성공 후, success(String) 리턴"
     )
     @LogTrace
-    @DeleteMapping("/{tripId}/reply/{replyId}")
-    public String deleteTripReply(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+    @DeleteMapping("/reply/{replyId}")
+    public String deleteTripReply(@PathVariable(name = "replyId") Long replyId,
+                                  @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
+        replyService.deleteReply(replyId);
 
         return "success";
     }
