@@ -13,17 +13,14 @@ public class UserInfoResDto {
     private String nickname;
     private String provider;
     private String motherLand;
-    private UrlResource profileImg;
+    private String profileImg;
 
-    public UserInfoResDto(Users users, UrlResource profileImg) {
+    public UserInfoResDto(Users users) {
         this.email = users.getEmail();
         this.nickname = users.getNickname();
         this.provider = users.getProvider();
         this.motherLand = users.getMotherLand();
-        this.profileImg = profileImg;
+        this.profileImg = users.getProfileImg();
     }
 
-    public void setProfileImg(UrlResource profileImg){
-        this.profileImg = profileImg;
-    }
 }

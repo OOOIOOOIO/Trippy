@@ -17,36 +17,53 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
-@Tag(name = "User Mypage", description = "회원 마이페이지 API")
+@Tag(name = "User 및 Mypage 관련 Controller", description = "회원 계정 및 마이페이지 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users/mypage")
+@RequestMapping("/api/users")
 public class UsersController {
 
     private final UsersService usersService;
 
-    /**
-     * 기존 유저인지 확인
-     * 로그인, 회원가입 > 기존 유저 확인 > 마이페이지 설정(NO) or home화면(YES)
-     * @param userInfoFromHeaderDto
-     * @return
-     */
+
     @Operation(
-            summary = "로그인/회원가입 후 기존 유저 확인 API",
-            description = "로그인/회원가입 후 기존 유저 확인"
+            summary = "계정 탈퇴 API",
+            description = "마이페이지에서 계정 탈퇴"
     )
     @ApiResponse(
             responseCode = "200",
-            description = "기존 유저인지 확인하고, 기존 유저면 1, 신규 유저면 0 리턴"
+            description = "마이페이지 계정 탈퇴 후, success(String) 리턴, apple은 로그아웃 후 db에서 계정 삭제"
     )
     @LogTrace
-    @GetMapping("/check")
-    public ResponseEntity<Integer> checkExistUser(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+    @DeleteMapping("")
+    public ResponseEntity<String> cancelAccount(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
-        UserInfoResDto userInfo = usersService.getUserInfo(userInfoFromHeaderDto.getUserId());
+        usersService.cancelAccount(userInfoFromHeaderDto);
 
-        return new ResponseEntity<>(0, HttpStatus.OK);
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
+
+
+    @Operation(
+            summary = "유료버전 구매 API",
+            description = "마이페이지에서 유료버전 구매"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "유료버전 구매 후, success(String) 리턴"
+    )
+    @LogTrace
+    @PatchMapping("/paidversion")
+    public ResponseEntity<String> purchasePaidVersion(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+
+
+        return new ResponseEntity<>("success", HttpStatus.OK);
+    }
+
+
+    /**
+     * =========================================================================================================
+     */
 
     @Operation(
             summary = "마이페이지 회원 정보 조회 API",
@@ -57,14 +74,13 @@ public class UsersController {
             description = "마이페이지 회원 정보 조회에 성공 후, 유저 정보 리턴"
     )
     @LogTrace
-    @GetMapping("")
+    @GetMapping("/mypage")
     public ResponseEntity<UserInfoResDto> getMypageProfile(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
-        UserInfoResDto userInfo = usersService.getUserInfo(userInfoFromHeaderDto.getUserId());
+        UserInfoResDto userInfo = usersService.getMypageProfile(userInfoFromHeaderDto.getUserId());
 
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }
-
 
     @Operation(
             summary = "마이페이지 프로필 처음 저장 API",
@@ -75,13 +91,13 @@ public class UsersController {
             description = "마이페이지 프로필 저장에 성공 후, success(String) 리턴"
     )
     @LogTrace
-    @PostMapping("")
+    @PostMapping("/mypage")
     public ResponseEntity<String> saveMypageProfile(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto,
-                                                      @RequestParam("nickname") String nickname,
-                                                      @RequestParam("motherLand") String motherLand,
-                                                      @RequestPart(required = false) MultipartFile file){
+                                                    @RequestParam("nickname") String nickname,
+                                                    @RequestParam("motherLand") String motherLand,
+                                                    @RequestPart(required = false) MultipartFile file){
 
-        usersService.saveUserInfo(userInfoFromHeaderDto.getUserId(), nickname, motherLand, file);
+        usersService.saveMypageProfile(userInfoFromHeaderDto.getUserId(), nickname, motherLand, file);
 
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
@@ -96,53 +112,16 @@ public class UsersController {
             description = "마이페이지 프로필 수정에 성공 후, success(String) 리턴"
     )
     @LogTrace
-    @PutMapping("")
+    @PutMapping("/mypage")
     public ResponseEntity<String> updateMypageProfile(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto,
                                                       @RequestParam("nickname") String nickname,
                                                       @RequestParam("motherLand") String motherLand,
                                                       @RequestPart(required = false) MultipartFile file){
 
-        usersService.updateUserInfo(userInfoFromHeaderDto.getUserId(), nickname, motherLand, file);
+        usersService.updateMypageProfile(userInfoFromHeaderDto.getUserId(), nickname, motherLand, file);
 
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
-
-
-    @Operation(
-            summary = "마이페이지 계정 탈퇴 API",
-            description = "마이페이지에서 계정 탈퇴"
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "마이페이지 계정 탈퇴 후, success(String) 리턴"
-    )
-    @LogTrace
-    @DeleteMapping("")
-    public ResponseEntity<String> cancelAccount(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
-
-        UserInfoResDto userInfo = usersService.getUserInfo(userInfoFromHeaderDto.getUserId());
-
-        return new ResponseEntity<>("success", HttpStatus.OK);
-    }
-
-
-    @Operation(
-            summary = "마이페이지 유료버전 구매 API",
-            description = "마이페이지에서 유료버전 구매"
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "유료버전 구매 후, success(String) 리턴"
-    )
-    @LogTrace
-    @PatchMapping("/paidversion")
-    public ResponseEntity<String> purchasePaidVersion(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
-
-        UserInfoResDto userInfo = usersService.getUserInfo(userInfoFromHeaderDto.getUserId());
-
-        return new ResponseEntity<>("success", HttpStatus.OK);
-    }
-
 
 
     /**

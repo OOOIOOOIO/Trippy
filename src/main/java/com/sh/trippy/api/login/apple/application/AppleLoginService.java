@@ -3,6 +3,7 @@ package com.sh.trippy.api.login.apple.application;
 import com.sh.trippy.api.login.apple.controller.dto.AppleUserInfoResponseDto;
 import com.sh.trippy.domain.user.application.UsersService;
 import com.sh.trippy.global.log.LogTrace;
+import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeaderDto;
 import com.sh.trippy.global.util.apple.AppleLoginClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +23,19 @@ public class AppleLoginService {
     private final UsersService usersService;
 
     @LogTrace
-    public int appleLogin(@RequestParam(name = "authorizationCode") String authorizationCode) throws IOException {
+    public int appleLogin(String authorizationCode) throws IOException {
 
         AppleUserInfoResponseDto appleUserInfoResponseDto = appleLoginClient.getAppleUserProfile(authorizationCode);
 
         return usersService.saveAppleUser(appleUserInfoResponseDto);
+
+    }
+
+    @LogTrace
+    public void appleLogout(Long userId){
+        String refreshToken = usersService.getAppleUserRefreshToken(userId);
+
+        appleLoginClient.logoutAppleAccount(refreshToken);
 
     }
 

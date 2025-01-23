@@ -5,7 +5,6 @@ import com.sh.trippy.domain.feedback.domain.model.Feedback;
 import com.sh.trippy.domain.reply.domain.model.Reply;
 import com.sh.trippy.domain.trip.domain.model.Trip;
 import com.sh.trippy.domain.tripcompanion.domain.model.TripCompanion;
-import com.sh.trippy.domain.user.api.dto.UserInfoUpdateReqDto;
 import com.sh.trippy.domain.tripstats.domain.model.TripStats;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -120,4 +119,7 @@ public class Users extends BaseTimeEntity {
         this.motherLand = motherLand;
     }
 
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }

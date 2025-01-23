@@ -3,6 +3,7 @@ package com.sh.trippy.global.util.apple;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.sh.trippy.api.login.apple.controller.dto.AppleSocialTokenInfoResponseDto;
 import com.sh.trippy.api.login.apple.controller.dto.AppleUserInfoResponseDto;
+import com.sh.trippy.global.log.LogTrace;
 import io.jsonwebtoken.JwsHeader;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -50,6 +51,7 @@ public class AppleLoginClient {
      * @param authorizationCode front로부터 받은 인증 코드
      * @return 디코딩된 사용자 정보를 담고 있는 AppleUserInfoResponseDto 객체
      */
+    @LogTrace
     public AppleUserInfoResponseDto getAppleUserProfile(String authorizationCode) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf(APPLICATION_FORM_URLENCODED_VALUE));
@@ -79,6 +81,30 @@ public class AppleLoginClient {
 
         return appleUserInfoResponseDto;
     }
+
+
+    /**
+     * refesh_token으로 탈퇴하기(revoke)
+     *
+     * @param refreshToken
+     */
+    @LogTrace
+    public void logoutAppleAccount(String refreshToken) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.valueOf(APPLICATION_FORM_URLENCODED_VALUE));
+
+        HttpEntity<String> request = new HttpEntity<>("client_id=" + clientId +
+                "&client_secret=" + generateClientSecret() +
+                "&token=" + refreshToken +
+                "&token_type_hint=" + "refresh_token", headers);
+
+        // response 없음
+        restTemplate.exchange(TOKEN_BASE_URL + "/auth/revoke", HttpMethod.POST, request, String.class);
+
+
+    }
+
+
 
     /**
      * Apple의 인증 서버와의 통신에 사용될 JWT을 생성하기 위해 사용되는 ClientSecret
@@ -116,5 +142,7 @@ public class AppleLoginClient {
             throw new RuntimeException("Error converting private key from String", e);
         }
     }
+
+
 
 }

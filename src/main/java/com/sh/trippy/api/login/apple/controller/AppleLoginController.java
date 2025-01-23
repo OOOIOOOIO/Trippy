@@ -2,6 +2,8 @@ package com.sh.trippy.api.login.apple.controller;
 
 import com.sh.trippy.api.login.apple.application.AppleLoginService;
 import com.sh.trippy.global.log.LogTrace;
+import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeader;
+import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeaderDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -53,7 +55,11 @@ public class AppleLoginController {
     )
     @LogTrace
     @PostMapping("/logout")
-    public ResponseEntity<String> appleLogout() {
+//    public ResponseEntity<String> appleLogout(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto) {
+    public ResponseEntity<String> appleLogout(@RequestParam(name = "userId") Long userId) {
+
+//        appleLoginService.appleLogout(userInfoFromHeaderDto.getUserId());
+        appleLoginService.appleLogout(userId);
 
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
