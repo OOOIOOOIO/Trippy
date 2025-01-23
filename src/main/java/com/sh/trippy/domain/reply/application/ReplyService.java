@@ -1,7 +1,10 @@
 package com.sh.trippy.domain.reply.application;
 
 import com.sh.trippy.domain.reply.api.dto.req.ReplyCreateReqDto;
+import com.sh.trippy.domain.reply.api.dto.res.ReplyInfoDto;
+import com.sh.trippy.domain.reply.api.dto.res.ReplyResDto;
 import com.sh.trippy.domain.reply.domain.model.Reply;
+import com.sh.trippy.domain.reply.domain.repository.ReplyQueryRepository;
 import com.sh.trippy.domain.reply.domain.repository.ReplyRepository;
 import com.sh.trippy.domain.trip.domain.model.Trip;
 import com.sh.trippy.domain.trip.domain.repository.TripRepository;
@@ -15,6 +18,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 @Slf4j
 @Transactional
 @Service
@@ -22,6 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReplyService {
 
     private final ReplyRepository replyRepository;
+    private final ReplyQueryRepository replyQueryRepository;
     private final UsersRepository usersRepository;
     private final TripRepository tripRepository;
 
@@ -29,6 +36,16 @@ public class ReplyService {
     /**
      * 댓글 조회
      */
+    public ReplyResDto getTripReply(Long tripId){
+        List<ReplyInfoDto> replyInfoDtoList = replyQueryRepository.getTripReplyList(tripId).orElseGet(null);
+
+        if(replyInfoDtoList == null){
+            return new ReplyResDto(null);
+        }
+
+        return new ReplyResDto(replyInfoDtoList);
+
+    }
 
 
 

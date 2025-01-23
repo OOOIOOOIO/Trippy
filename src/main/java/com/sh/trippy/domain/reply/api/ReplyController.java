@@ -2,6 +2,7 @@ package com.sh.trippy.domain.reply.api;
 
 
 import com.sh.trippy.domain.reply.api.dto.req.ReplyCreateReqDto;
+import com.sh.trippy.domain.reply.api.dto.res.ReplyResDto;
 import com.sh.trippy.domain.reply.application.ReplyService;
 import com.sh.trippy.global.log.LogTrace;
 import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeader;
@@ -34,10 +35,12 @@ public class ReplyController {
     )
     @LogTrace
     @GetMapping("/{tripId}/reply")
-    public ResponseEntity<String> getTripReply(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+    public ResponseEntity<ReplyResDto> getTripReply(@PathVariable(name = "tripId") Long tripId,
+                                               @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
+        ReplyResDto tripReply = replyService.getTripReply(tripId);
 
-        return new ResponseEntity<>("success", HttpStatus.OK);
+        return new ResponseEntity<>(tripReply, HttpStatus.OK);
     }
 
 
@@ -54,6 +57,7 @@ public class ReplyController {
     public ResponseEntity<String> createTripReply(@PathVariable(name = "tripId") Long tripId,
                                   @RequestBody ReplyCreateReqDto replyCreateReqDto,
                                   @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto) {
+
         replyService.createReply(tripId, replyCreateReqDto, userInfoFromHeaderDto);
 
         return new ResponseEntity<>("success", HttpStatus.OK);
