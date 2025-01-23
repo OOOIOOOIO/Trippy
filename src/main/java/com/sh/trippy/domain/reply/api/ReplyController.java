@@ -11,6 +11,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Trip Reply Controller", description = "Trip Reply API")
@@ -32,10 +34,10 @@ public class ReplyController {
     )
     @LogTrace
     @GetMapping("/{tripId}/reply")
-    public String getTripReply(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+    public ResponseEntity<String> getTripReply(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
 
-        return "success";
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
 
@@ -49,12 +51,12 @@ public class ReplyController {
     )
     @LogTrace
     @PostMapping("/{tripId}/reply")
-    public String createTripReply(@PathVariable(name = "tripId") Long tripId,
+    public ResponseEntity<String> createTripReply(@PathVariable(name = "tripId") Long tripId,
                                   @RequestBody ReplyCreateReqDto replyCreateReqDto,
                                   @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto) {
         replyService.createReply(tripId, replyCreateReqDto, userInfoFromHeaderDto);
 
-        return "success";
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
 
@@ -85,12 +87,12 @@ public class ReplyController {
     )
     @LogTrace
     @DeleteMapping("/reply/{replyId}")
-    public String deleteTripReply(@PathVariable(name = "replyId") Long replyId,
+    public ResponseEntity<String> deleteTripReply(@PathVariable(name = "replyId") Long replyId,
                                   @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
         replyService.deleteReply(replyId);
 
-        return "success";
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
 

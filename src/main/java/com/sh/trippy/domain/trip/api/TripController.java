@@ -74,12 +74,12 @@ public class TripController {
     )
     @LogTrace
     @PutMapping("/{tripId}")
-    public String updateTrip(@PathVariable(name = "tripId") Long tripId,
+    public ResponseEntity<String> updateTrip(@PathVariable(name = "tripId") Long tripId,
                              @RequestBody TripUpdateReqDto tripUpdateReqDto){
 
         tripService.updateTrip(tripId, tripUpdateReqDto);
 
-        return "success";
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
     @Operation(
@@ -92,12 +92,12 @@ public class TripController {
     )
     @LogTrace
     @DeleteMapping("/{tripId}")
-    public String deleteTrip(@PathVariable(name = "tripId") Long tripId){
+    public ResponseEntity<String> deleteTrip(@PathVariable(name = "tripId") Long tripId){
 
         tripService.deleteTrip(tripId);
 
 
-        return "success";
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
 
@@ -111,11 +111,11 @@ public class TripController {
     )
     @LogTrace
     @PatchMapping("/{tripId}")
-    public String updateBeenFlag(@PathVariable(name = "tripId") Long tripId){
+    public ResponseEntity<String> updateBeenFlag(@PathVariable(name = "tripId") Long tripId){
 
         tripService.updateBeenFlag(tripId);
 
-        return "success";
+        return new ResponseEntity<>("success", HttpStatus.OK);
     }
 
 
