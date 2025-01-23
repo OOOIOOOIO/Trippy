@@ -24,9 +24,9 @@ public class QTrip extends EntityPathBase<Trip> {
 
     public final com.sh.trippy.domain.common.QBaseTimeEntity _super = new com.sh.trippy.domain.common.QBaseTimeEntity(this);
 
-    public final DatePath<java.time.LocalDate> abroadDate = createDate("abroadDate", java.time.LocalDate.class);
-
     public final BooleanPath abroadFlag = createBoolean("abroadFlag");
+
+    public final DatePath<java.time.LocalDate> arrivalDate = createDate("arrivalDate", java.time.LocalDate.class);
 
     public final BooleanPath beenFlag = createBoolean("beenFlag");
 
@@ -54,6 +54,8 @@ public class QTrip extends EntityPathBase<Trip> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
+    public final com.sh.trippy.domain.user.domain.QUsers users;
+
     public QTrip(String variable) {
         this(Trip.class, forVariable(variable), INITS);
     }
@@ -73,6 +75,7 @@ public class QTrip extends EntityPathBase<Trip> {
     public QTrip(Class<? extends Trip> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.shareChecklist = inits.isInitialized("shareChecklist") ? new com.sh.trippy.domain.sharechecklist.domain.model.QShareChecklist(forProperty("shareChecklist"), inits.get("shareChecklist")) : null;
+        this.users = inits.isInitialized("users") ? new com.sh.trippy.domain.user.domain.QUsers(forProperty("users"), inits.get("users")) : null;
     }
 
 }

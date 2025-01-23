@@ -128,20 +128,16 @@ public class UsersService {
         if(isUserExist(appleUserInfoResponseDto.getEmail())){
             return 1;
         }
-        else{
-            Users user = Users.createUser(appleUserInfoResponseDto.getEmail(),
-                    appleUserInfoResponseDto.getRefreshToken(),
-                    nickname,
-                    appleUserInfoResponseDto.getProvider(),
-                    Role.USER);
 
-            usersRepository.save(user);
+        Users user = Users.createUser(appleUserInfoResponseDto.getEmail(),
+                appleUserInfoResponseDto.getRefreshToken(),
+                nickname,
+                appleUserInfoResponseDto.getProvider(),
+                Role.USER);
 
-            return -1;
-        }
+        usersRepository.save(user);
 
-
-
+        return -1;
 
     }
 
@@ -151,17 +147,16 @@ public class UsersService {
         if(isUserExist(email)){
             return 1;
         }
-        else{
-            Users user = Users.createUser(email,
-                    "NONE",
-                    nickname,
-                    provider,
-                    Role.USER);
 
-            usersRepository.save(user);
+        Users user = Users.createUser(email,
+                "NONE",
+                nickname,
+                provider,
+                Role.USER);
 
-            return -1;
-        }
+        usersRepository.save(user);
+
+        return -1;
 
     }
 

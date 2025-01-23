@@ -51,6 +51,8 @@ public class QUsers extends EntityPathBase<Users> {
 
     public final ListPath<com.sh.trippy.domain.tripcompanion.domain.model.TripCompanion, com.sh.trippy.domain.tripcompanion.domain.model.QTripCompanion> tripCompanionList = this.<com.sh.trippy.domain.tripcompanion.domain.model.TripCompanion, com.sh.trippy.domain.tripcompanion.domain.model.QTripCompanion>createList("tripCompanionList", com.sh.trippy.domain.tripcompanion.domain.model.TripCompanion.class, com.sh.trippy.domain.tripcompanion.domain.model.QTripCompanion.class, PathInits.DIRECT2);
 
+    public final ListPath<com.sh.trippy.domain.trip.domain.model.Trip, com.sh.trippy.domain.trip.domain.model.QTrip> tripList = this.<com.sh.trippy.domain.trip.domain.model.Trip, com.sh.trippy.domain.trip.domain.model.QTrip>createList("tripList", com.sh.trippy.domain.trip.domain.model.Trip.class, com.sh.trippy.domain.trip.domain.model.QTrip.class, PathInits.DIRECT2);
+
     public final com.sh.trippy.domain.tripstats.domain.model.QTripStats tripStats;
 
     //inherited

@@ -36,7 +36,7 @@ public class PlanController {
             description = "해당 일자의 여행 게획 조회 성공 후, 여행 계획 리스트로 리턴"
     )
     @LogTrace
-    @GetMapping("/{tripId}/plan}")
+    @GetMapping("/{tripId}/plan")
     public ResponseEntity<String> getTripPlan(@PathVariable(name = "tripId") Long tripId,
                               @RequestParam(name = "tripDate") LocalDate tripDate,
                               @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){

@@ -24,6 +24,8 @@ public class QPlan extends EntityPathBase<Plan> {
 
     public final com.sh.trippy.domain.common.QBaseTimeEntity _super = new com.sh.trippy.domain.common.QBaseTimeEntity(this);
 
+    public final EnumPath<com.sh.trippy.domain.common.CompleteStatus> completeStatus = createEnum("completeStatus", com.sh.trippy.domain.common.CompleteStatus.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
