@@ -35,6 +35,7 @@ public class TokenIssueController {
      */
 
 
+
     /**
      * accessToken 기간 만료시
      * J005
@@ -57,7 +58,7 @@ public class TokenIssueController {
     public ResponseEntity<String> reissueAccessToken(@TokenForReIssueFromHeader TokenForReIssueFromHeaderDto tokenForReIssueFromHeaderDto) {
 
 
-        String accessToken = jwtUtils.generateAccessToken(tokenForReIssueFromHeaderDto.getUserId(), tokenForReIssueFromHeaderDto.getEmail(), tokenForReIssueFromHeaderDto.getProvider());
+        String accessToken = jwtUtils.generateAccessToken(tokenForReIssueFromHeaderDto.getUserId(), tokenForReIssueFromHeaderDto.getEmail(), tokenForReIssueFromHeaderDto.getProvider(), tokenForReIssueFromHeaderDto.isPaidFlag());
 
         tokenService.uploadAccessTokenToRedis(accessToken, tokenForReIssueFromHeaderDto.getUserId()); // redis에 쏘기
 

@@ -1,7 +1,7 @@
 package com.sh.trippy.domain.user.application;
 
 
-import com.sh.trippy.api.login.apple.controller.dto.AppleUserInfoResponseDto;
+import com.sh.trippy.api.login.apple.controller.dto.AppleResponseInfoResDto;
 import com.sh.trippy.domain.user.api.dto.UserInfoResDto;
 import com.sh.trippy.domain.user.domain.Role;
 import com.sh.trippy.domain.user.domain.Users;
@@ -15,12 +15,10 @@ import com.sh.trippy.global.util.aws.AmazonS3Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -70,27 +68,29 @@ public class UsersService {
     /**
      * 새로 로그인할 때마다 refreshToken 재발급 됨
      * Apple 회원 저장
-     * @param appleUserInfoResponseDto
+     * @param appleResponseInfoResDto
      */
     @LogTrace
-    public int saveAppleUser(AppleUserInfoResponseDto appleUserInfoResponseDto) {
+    public String saveAppleUser(AppleResponseInfoResDto appleResponseInfoResDto) {
         String nickname = generateNickname();
 
-        Users userExist = isUserExist(appleUserInfoResponseDto.getEmail());
+        Users userExist = isUserExist(appleResponseInfoResDto.getEmail());
         if(userExist != null){
-            userExist.updateRefreshToken(appleUserInfoResponseDto.getRefreshToken());
-            return 1;
+            userExist.updateRefreshToken(appleResponseInfoResDto.getRefreshToken());
+            return userExist.getUserId() + "," + "none,exist";
         }
 
-        Users user = Users.createUser(appleUserInfoResponseDto.getEmail(),
-                appleUserInfoResponseDto.getRefreshToken(),
+        Users user = Users.createUser(appleResponseInfoResDto.getEmail(),
+                appleResponseInfoResDto.getRefreshToken(),
                 nickname,
-                appleUserInfoResponseDto.getProvider(),
+                appleResponseInfoResDto.getProvider(),
                 Role.USER);
 
-        usersRepository.save(user);
+        Users savedUser = usersRepository.save(user);
 
-        return -1;
+        if(savedUser.isPaidFlag()) return savedUser.getUserId() +"," + "paid,new";
+
+        return savedUser.getUserId() + "," + "none,new";
 
     }
 

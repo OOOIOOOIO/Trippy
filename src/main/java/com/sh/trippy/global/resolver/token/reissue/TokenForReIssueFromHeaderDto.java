@@ -11,10 +11,12 @@ public class TokenForReIssueFromHeaderDto {
     private Long userId;
     private String email;
     private String provider;
+    private boolean paidFlag;
 
-    public TokenForReIssueFromHeaderDto(Long userId, String email, String provider) {
+    public TokenForReIssueFromHeaderDto(Long userId, String email, String provider, boolean paidFlag) {
         this.userId = userId;
         this.email = email;
         this.provider = provider;
+        this.paidFlag = paidFlag;
     }
 }

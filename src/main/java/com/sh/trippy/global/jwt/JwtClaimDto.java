@@ -14,13 +14,15 @@ public class JwtClaimDto {
     private String email;
     private String provider;
     private String tokenType;
+    private boolean paidFlag;
 
 
-    public JwtClaimDto(Long userId, String email, String provider, String tokenType) {
+    public JwtClaimDto(Long userId, String email, String provider, String tokenType, boolean paidFlag) {
         this.userId = userId;
         this.email = email;
         this.provider = provider;
         this.tokenType = tokenType;
+        this.paidFlag = paidFlag;
     }
 
 }

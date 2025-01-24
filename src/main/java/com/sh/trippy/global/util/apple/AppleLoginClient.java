@@ -1,8 +1,8 @@
 package com.sh.trippy.global.util.apple;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.sh.trippy.api.login.apple.controller.dto.AppleSocialTokenInfoResponseDto;
-import com.sh.trippy.api.login.apple.controller.dto.AppleUserInfoResponseDto;
+import com.sh.trippy.api.login.apple.controller.dto.AppleAuthTokenInfoResDto;
+import com.sh.trippy.api.login.apple.controller.dto.AppleResponseInfoResDto;
 import com.sh.trippy.global.log.LogTrace;
 import io.jsonwebtoken.JwsHeader;
 import io.jsonwebtoken.Jwts;
@@ -52,7 +52,7 @@ public class AppleLoginClient {
      * @return 디코딩된 사용자 정보를 담고 있는 AppleUserInfoResponseDto 객체
      */
     @LogTrace
-    public AppleUserInfoResponseDto getAppleUserProfile(String authorizationCode) throws IOException {
+    public AppleResponseInfoResDto getAppleUserProfile(String authorizationCode) throws IOException {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.valueOf(APPLICATION_FORM_URLENCODED_VALUE));
 
@@ -61,8 +61,8 @@ public class AppleLoginClient {
                 "&grant_type=" + GRANT_TYPE +
                 "&code=" + authorizationCode, headers);
 
-        ResponseEntity<AppleSocialTokenInfoResponseDto> response = restTemplate.exchange(
-                TOKEN_BASE_URL + "/auth/token", HttpMethod.POST, request, AppleSocialTokenInfoResponseDto.class);
+        ResponseEntity<AppleAuthTokenInfoResDto> response = restTemplate.exchange(
+                TOKEN_BASE_URL + "/auth/token", HttpMethod.POST, request, AppleAuthTokenInfoResDto.class);
 
         DecodedJWT decodedJWT = com.auth0.jwt.JWT.decode(Objects.requireNonNull(response.getBody()).getIdToken());
 
@@ -77,9 +77,9 @@ public class AppleLoginClient {
         log.info("===== sub : " + subject);
         log.info("===== email : " + email);
 
-        AppleUserInfoResponseDto appleUserInfoResponseDto = new AppleUserInfoResponseDto(subject, email, refreshToken, PROVIDER);
+        AppleResponseInfoResDto appleResponseInfoResDto = new AppleResponseInfoResDto(subject, email, refreshToken, PROVIDER);
 
-        return appleUserInfoResponseDto;
+        return appleResponseInfoResDto;
     }
 
 

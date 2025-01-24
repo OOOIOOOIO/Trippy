@@ -1,9 +1,8 @@
 package com.sh.trippy.api.login.apple.controller;
 
+import com.sh.trippy.api.login.UserTokenResDto;
 import com.sh.trippy.api.login.apple.application.AppleLoginService;
 import com.sh.trippy.global.log.LogTrace;
-import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeader;
-import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeaderDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,6 +26,7 @@ public class AppleLoginController {
 
     private final AppleLoginService appleLoginService;
 
+
     @Operation(
             summary = "애플 계정 회원가입/로그인 API",
             description = "fornt에서 AuthCode 받아서 애플 계정으로 회원가입/로그인하기"
@@ -37,11 +37,12 @@ public class AppleLoginController {
     )
     @LogTrace
     @PostMapping("/login")
-    public ResponseEntity<Integer> appleLogin(@RequestParam(name = "authorizationCode") String authorizationCode) throws IOException {
 
-        int isUserExist = appleLoginService.appleLogin(authorizationCode);
+    public ResponseEntity<UserTokenResDto> appleLogin(@RequestParam(name = "authorizationCode") String authorizationCode) throws IOException {
 
-        return new ResponseEntity<>(isUserExist, HttpStatus.OK);
+        UserTokenResDto userTokenResDto = appleLoginService.appleLogin(authorizationCode);
+
+        return new ResponseEntity<>(userTokenResDto, HttpStatus.OK);
     }
 
 
@@ -63,12 +64,6 @@ public class AppleLoginController {
 
         return new ResponseEntity<>("success", HttpStatus.OK);
     }
-
-
-
-
-
-
 
 
 }

@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AppleSocialTokenInfoResponseDto {
+public class AppleAuthTokenInfoResDto {
     @JsonProperty("access_token")
     private String accessToken;
 
@@ -26,7 +26,7 @@ public class AppleSocialTokenInfoResponseDto {
     private String idToken;
 
     @Builder
-    public AppleSocialTokenInfoResponseDto(String accessToken, String tokenType, Long expiresIn, String refreshToken, String idToken) {
+    public AppleAuthTokenInfoResDto(String accessToken, String tokenType, Long expiresIn, String refreshToken, String idToken) {
         this.accessToken = accessToken;
         this.tokenType = tokenType;
         this.expiresIn = expiresIn;

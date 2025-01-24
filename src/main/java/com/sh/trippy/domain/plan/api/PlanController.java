@@ -75,7 +75,7 @@ public class PlanController {
             description = "여행에 대한 게획 수정 성공 후, success(String) 리턴"
     )
     @LogTrace
-    @PutMapping("/plan/{planId")
+    @PutMapping("/plan/{planId}")
     public ResponseEntity<String> updateTripPlan(@PathVariable(name = "planId") Long planId,
                                  @RequestBody PlanUpdateReqDto planUpdateReqDto,
                                  @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
