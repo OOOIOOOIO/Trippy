@@ -34,7 +34,7 @@ public class UserInfoFromHeaderArgumentResolver implements HandlerMethodArgument
 
         String accessToken = jwtUtils.getAccessTokenFromHeader((HttpServletRequest) webRequest.getNativeRequest());
 
-        JwtClaimDto claimFromAccessToken = jwtUtils.getClaimFromAccessToken(accessToken);
+        JwtClaimDto claimFromAccessToken = jwtUtils.getClaimFromToken(accessToken);
 
 
         return new UserInfoFromHeaderDto(claimFromAccessToken.getUserId(), claimFromAccessToken.getEmail(), claimFromAccessToken.getProvider(), claimFromAccessToken.isPaidFlag());

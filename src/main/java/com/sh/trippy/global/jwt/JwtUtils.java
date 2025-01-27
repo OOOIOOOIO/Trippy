@@ -81,9 +81,9 @@ public class JwtUtils {
      * - userId
      * - email
      * - provider
-     * - tokenType
+     * - paidFlag
      */
-    public JwtClaimDto getClaimFromAccessToken(String token){
+    public JwtClaimDto getClaimFromToken(String token){
 //        Object userInfo = Jwts.parserBuilder()
 //                .setSigningKey(jwtInfoProperties.getSecret().getBytes())
 //                .build()

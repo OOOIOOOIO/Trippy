@@ -10,9 +10,11 @@ import lombok.NoArgsConstructor;
 public class TokenIssueResDto {
     private String authorization;
     private String refreshToken;
+    private int existUser;
 
-    public TokenIssueResDto(String authorization, String refreshToken) {
+    public TokenIssueResDto(String authorization, String refreshToken, int existUser) {
         this.authorization = authorization;
         this.refreshToken = refreshToken;
+        this.existUser = existUser;
     }
 }

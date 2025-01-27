@@ -7,12 +7,12 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserTokenResDto {
-    private String accessToken;
+    private String authorization;
     private String refreshToken;
     private int existUser;
 
-    public UserTokenResDto(String accessToken, String refreshToken, int existUser) {
-        this.accessToken = accessToken;
+    public UserTokenResDto(String authorization, String refreshToken, int existUser) {
+        this.authorization = authorization;
         this.refreshToken = refreshToken;
         this.existUser = existUser;
     }

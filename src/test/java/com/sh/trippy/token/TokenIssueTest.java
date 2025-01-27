@@ -2,12 +2,16 @@ package com.sh.trippy.token;
 
 import com.sh.trippy.api.jwt.application.TokenService;
 import com.sh.trippy.global.common.RedisConst;
+import com.sh.trippy.global.jwt.JwtClaimDto;
 import com.sh.trippy.global.jwt.JwtUtils;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 public class TokenIssueTest {
@@ -17,6 +21,7 @@ public class TokenIssueTest {
     TokenService tokenService;
 
     @Test
+    @Transactional
     @DisplayName(value = "토큰 발급 테스트")
     public void issueTokenTest(){
         // given
@@ -48,8 +53,22 @@ public class TokenIssueTest {
         System.out.println("accessToken = " + accessToken);
         System.out.println("refreshToken = " + refreshToken);
 
-        Assertions.assertThat(jwtAccessToken).isEqualTo(accessToken);
-        Assertions.assertThat(jwtRefreshToken).isEqualTo(refreshToken);
+        assertThat(jwtAccessToken).isEqualTo(accessToken);
+        assertThat(jwtRefreshToken).isEqualTo(refreshToken);
+
+
+    }
+
+    @Test
+    public void getClaimFromExpiredJwtToken(){
+        // given
+        String expiredToken = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJiY25oZzZ6ODRnQHByaXZhdGVyZWxheS5hcHBsZWlkLmNvbSIsInVzZXJJbmZvIjp7InVzZXJJZCI6MSwiZW1haWwiOiJiY25oZzZ6ODRnQHByaXZhdGVyZWxheS5hcHBsZWlkLmNvbSIsInByb3ZpZGVyIjoiYXBwbGUiLCJ0b2tlblR5cGUiOiJyZWZyZXNoX3Rva2VuIiwicGFpZEZsYWciOmZhbHNlfSwiaWF0IjoxNzM3OTYxNzkzLCJleHAiOjE3NDIxOTUzOTN9.5AEH3WrLsuzgBlVJguv9HJ7TYEENF2zf7lAsw4fWI6Y";
+        // when
+        JwtClaimDto claimFromToken = jwtUtils.getClaimFromToken(expiredToken);
+
+        String email = claimFromToken.getEmail();
+        // then
+        System.out.println("email = " + email);
 
 
     }

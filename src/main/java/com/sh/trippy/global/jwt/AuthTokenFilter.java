@@ -162,7 +162,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
 
     private void setUserInSecurityContext(HttpServletRequest request, String token) {
-        JwtClaimDto claimFromToken = jwtUtils.getClaimFromAccessToken(token);
+        JwtClaimDto claimFromToken = jwtUtils.getClaimFromToken(token);
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsernameAndProvider(claimFromToken.getEmail(), claimFromToken.getProvider());
 
@@ -197,7 +197,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     private String getAccessTokenFromRedis(String accessToken, String refreshToken){
         log.info("==== Get Access Token From Redis ====");
-        JwtClaimDto claimFromToken = jwtUtils.getClaimFromAccessToken(accessToken);
+        JwtClaimDto claimFromToken = jwtUtils.getClaimFromToken(accessToken);
 
         String accessTokenFromRedis = tokenService.getTokenFromRedis(RedisConst.ACCESS_TOKEN.prefix() + claimFromToken.getUserId());
         log.info("accessTokenFromRedis : " + accessTokenFromRedis);
@@ -217,7 +217,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
 
     private Long getUserIdFromToken(String token){
-        JwtClaimDto userInfo = jwtUtils.getClaimFromAccessToken(token);
+        JwtClaimDto userInfo = jwtUtils.getClaimFromToken(token);
 
         return userInfo.getUserId();
     }

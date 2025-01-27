@@ -36,7 +36,7 @@ public class TokenForReIssueFromHeaderArgumentResolver implements HandlerMethodA
 
         JwtClaimDto claimFromAccessToken = null;
 
-        claimFromAccessToken = jwtUtils.getClaimFromAccessToken(refreshToken);
+        claimFromAccessToken = jwtUtils.getClaimFromToken(refreshToken);
 
         return new TokenForReIssueFromHeaderDto(claimFromAccessToken.getUserId(), claimFromAccessToken.getEmail(), claimFromAccessToken.getProvider(), claimFromAccessToken.isPaidFlag());
 

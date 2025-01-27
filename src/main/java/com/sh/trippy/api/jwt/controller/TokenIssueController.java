@@ -1,6 +1,8 @@
 package com.sh.trippy.api.jwt.controller;
 
 import com.sh.trippy.api.jwt.application.TokenService;
+import com.sh.trippy.api.jwt.controller.dto.TokenIssueResDto;
+import com.sh.trippy.api.login.UserTokenResDto;
 import com.sh.trippy.global.jwt.JwtUtils;
 import com.sh.trippy.global.log.LogTrace;
 import com.sh.trippy.global.resolver.token.reissue.TokenForReIssueFromHeader;
@@ -28,11 +30,33 @@ public class TokenIssueController {
 
     /**
      * 토큰 정보가 일치하지 않는 경우
+     * J002
      * J003
      * J004
-     * J002
      * --> 다시 로그인 해주세요
      */
+    @Operation(
+            summary = "JWT 토큰 형식이 잘못된 경우",
+            description = "토큰 재발급"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "에러코드 J001, J002, J003일 떄 accessToken 재발급"
+    )
+    @LogTrace
+    @PostMapping("/")
+    public ResponseEntity<TokenIssueResDto> reissueTokens(@TokenForReIssueFromHeader TokenForReIssueFromHeaderDto tokenForReIssueFromHeaderDto) {
+
+
+        String accessToken = jwtUtils.generateAccessToken(tokenForReIssueFromHeaderDto.getUserId(), tokenForReIssueFromHeaderDto.getEmail(), tokenForReIssueFromHeaderDto.getProvider(), tokenForReIssueFromHeaderDto.isPaidFlag());
+        String refreshToken = jwtUtils.generateRefreshToken(tokenForReIssueFromHeaderDto.getUserId(), tokenForReIssueFromHeaderDto.getEmail(), tokenForReIssueFromHeaderDto.getProvider(), tokenForReIssueFromHeaderDto.isPaidFlag());
+
+        tokenService.uploadAccessTokenToRedis(accessToken, tokenForReIssueFromHeaderDto.getUserId()); // redis에 쏘기
+        tokenService.uploadRefreshTokenToRedis(refreshToken, tokenForReIssueFromHeaderDto.getUserId());
+
+        return new ResponseEntity<>(new TokenIssueResDto(accessToken, refreshToken, 1), HttpStatus.OK);
+
+    }
 
 
 
@@ -42,16 +66,13 @@ public class TokenIssueController {
      * J006
      * --> accessToken 재발급
      */
-    /**
-     * 카카오 최초 로그인 후 사용자 정보 수정
-     */
     @Operation(
             summary = "AccessToken 만료시",
             description = "AccessToken 재발급"
     )
     @ApiResponse(
             responseCode = "200",
-            description = "AccessToken 재발급에 성공하였습니다."
+            description = "에러코드 J005, J006일 떄 accessToken 재발급"
     )
     @LogTrace
     @PostMapping("/access")
@@ -70,24 +91,29 @@ public class TokenIssueController {
      * refeshToken 기간 만료시
      * J001
      * J007
-     * kakao로그인
      *
      */
-//    @PostMapping("/refresh")
-//    public ResponseEntity<TokenIssueResDto> reissueRefreshToken(){
-//
-//        /**
-//         * claim 만료시간과 관계 있는지 확인하기
-//         */
-//
-//        String accessToken = jwtUtils.generateAccessToken(tokenForReIssueFromHeaderDto.getUserId(), tokenForReIssueFromHeaderDto.getEmail(), tokenForReIssueFromHeaderDto.getProvider());
-//        String refreshToken = jwtUtils.generateRefreshToken(tokenForReIssueFromHeaderDto.getUserId(), tokenForReIssueFromHeaderDto.getEmail(), tokenForReIssueFromHeaderDto.getProvider());
-//
-//        tokenService.uploadAccessTokenToRedis(accessToken, tokenForReIssueFromHeaderDto.getUserId()); // redis에 쏘기
-//        tokenService.uploadRefreshTokenToRedis(refreshToken, tokenForReIssueFromHeaderDto.getUserId());
-//
-//        return new ResponseEntity<>(new TokenIssueResDto(accessToken, refreshToken), HttpStatus.OK);
-//    }
+    @Operation(
+            summary = "RefreshToken 만료시",
+            description = "RefreshToken 재발급"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "에러코드 J001, J007일 떄 accessToken, refreshToken 재발급"
+    )
+    @LogTrace
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenIssueResDto> reissueRefreshToken(@TokenForReIssueFromHeader TokenForReIssueFromHeaderDto tokenForReIssueFromHeaderDto){
+
+
+        String accessToken = jwtUtils.generateAccessToken(tokenForReIssueFromHeaderDto.getUserId(), tokenForReIssueFromHeaderDto.getEmail(), tokenForReIssueFromHeaderDto.getProvider(), tokenForReIssueFromHeaderDto.isPaidFlag());
+        String refreshToken = jwtUtils.generateRefreshToken(tokenForReIssueFromHeaderDto.getUserId(), tokenForReIssueFromHeaderDto.getEmail(), tokenForReIssueFromHeaderDto.getProvider(), tokenForReIssueFromHeaderDto.isPaidFlag());
+
+        tokenService.uploadAccessTokenToRedis(accessToken, tokenForReIssueFromHeaderDto.getUserId()); // redis에 쏘기
+        tokenService.uploadRefreshTokenToRedis(refreshToken, tokenForReIssueFromHeaderDto.getUserId());
+
+        return new ResponseEntity<>(new TokenIssueResDto(accessToken, refreshToken, 1), HttpStatus.OK);
+    }
 
 
 
