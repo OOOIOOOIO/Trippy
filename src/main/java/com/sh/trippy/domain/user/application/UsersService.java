@@ -1,6 +1,8 @@
 package com.sh.trippy.domain.user.application;
 
 
+import com.sh.trippy.api.jwt.application.TokenService;
+import com.sh.trippy.api.login.UserTokenResDto;
 import com.sh.trippy.api.login.apple.controller.dto.AppleResponseInfoResDto;
 import com.sh.trippy.domain.user.api.dto.UserInfoResDto;
 import com.sh.trippy.domain.user.domain.Role;
@@ -8,6 +10,7 @@ import com.sh.trippy.domain.user.domain.Users;
 import com.sh.trippy.domain.user.domain.repository.UsersRepository;
 import com.sh.trippy.global.exception.CustomErrorCode;
 import com.sh.trippy.global.exception.CustomException;
+import com.sh.trippy.global.jwt.JwtUtils;
 import com.sh.trippy.global.log.LogTrace;
 import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeaderDto;
 import com.sh.trippy.global.util.apple.AppleLoginClient;
@@ -32,12 +35,15 @@ public class UsersService {
     private final UsersRepository usersRepository;
     private final AmazonS3Service amazonS3Service;
     private final AppleLoginClient appleLoginClient;
+    private final JwtUtils jwtUtils;
+    private final TokenService tokenService;
 
     @Value("${file.path}")
     private String filePath;
 
 
     /**
+     * 탈퇴하기
      * 애플인 경우에만 로그아웃 후 DB에서 user 정보 삭제
      * @param userInfoFromHeaderDto
      */
@@ -55,7 +61,32 @@ public class UsersService {
 
 
     @LogTrace
-    public void purchasePaidVersion(){
+    public UserTokenResDto purchasePaidVersion(UserInfoFromHeaderDto userInfoFromHeaderDto){
+        Users users = usersRepository.findById(userInfoFromHeaderDto.getUserId()).orElseThrow(() -> new CustomException(CustomErrorCode.UserNotFoundException));
+
+        boolean currentUserPaidVersion = users.isPaidFlag();
+
+        if(!currentUserPaidVersion){
+            throw new CustomException(CustomErrorCode.AlreadyPaidVersionException);
+        }
+
+        users.updatePaidFlag(currentUserPaidVersion);
+
+        Long userId = users.getUserId();
+        int existUser = 1;
+        boolean paidFlag = true;
+
+        // token 발급, 첫로그인은
+        String jwtAccessToken = jwtUtils.generateAccessToken(userId, users.getEmail(), users.getProvider(), paidFlag);
+        String jwtRefreshToken = jwtUtils.generateRefreshToken(userId, users.getEmail(), users.getProvider(), paidFlag);
+
+        // redis 저장
+        tokenService.uploadAccessTokenToRedis(jwtAccessToken, userId);
+        tokenService.uploadRefreshTokenToRedis(jwtRefreshToken, userId);
+
+
+        return new UserTokenResDto(jwtAccessToken, jwtRefreshToken, existUser);
+
 
     }
 
@@ -76,7 +107,7 @@ public class UsersService {
 
         Users userExist = isUserExist(appleResponseInfoResDto.getEmail());
         if(userExist != null){
-            userExist.updateRefreshToken(appleResponseInfoResDto.getRefreshToken());
+            userExist.updateAppleRefreshToken(appleResponseInfoResDto.getRefreshToken());
             return userExist.getUserId() + "," + "none,exist";
         }
 

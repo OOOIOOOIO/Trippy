@@ -1,5 +1,6 @@
 package com.sh.trippy.domain.user.api;
 
+import com.sh.trippy.api.login.UserTokenResDto;
 import com.sh.trippy.domain.user.api.dto.UserInfoResDto;
 import com.sh.trippy.domain.user.api.dto.UserInfoUpdateReqDto;
 import com.sh.trippy.domain.user.application.UsersService;
@@ -50,14 +51,15 @@ public class UsersController {
     )
     @ApiResponse(
             responseCode = "200",
-            description = "유료버전 구매 후, success(String) 리턴"
+            description = "유료버전 구매 후, accessToken, refreshToken 재발급(paidFlag 수정)"
     )
     @LogTrace
     @PatchMapping("/paidversion")
-    public ResponseEntity<String> purchasePaidVersion(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+    public ResponseEntity<UserTokenResDto> purchasePaidVersion(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
+        UserTokenResDto userTokenResDto = usersService.purchasePaidVersion(userInfoFromHeaderDto);
 
-        return new ResponseEntity<>("success", HttpStatus.OK);
+        return new ResponseEntity<>(userTokenResDto, HttpStatus.OK);
     }
 
 

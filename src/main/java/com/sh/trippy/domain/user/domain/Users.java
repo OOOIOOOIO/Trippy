@@ -119,7 +119,11 @@ public class Users extends BaseTimeEntity {
         this.motherLand = motherLand;
     }
 
-    public void updateRefreshToken(String refreshToken) {
+    public void updateAppleRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
+    }
+
+    public void updatePaidFlag(boolean paidFlag){
+        this.paidFlag = !paidFlag;
     }
 }
