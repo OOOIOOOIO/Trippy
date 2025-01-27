@@ -29,7 +29,7 @@ public class TokenService {
     }
 
     public void uploadRefreshTokenToRedis(String token, Long userId){
-        redisUtil.putString(REFRESH_TOKEN.prefix() + userId, token, jwtInfoProperties.getAccessTokenExpireMin());
+        redisUtil.putString(REFRESH_TOKEN.prefix() + userId, token, jwtInfoProperties.getRefreshTokenExpireMin());
 
         System.out.println();
     }
@@ -40,6 +40,7 @@ public class TokenService {
     public String getTokenFromRedis(String prefix){
         return redisUtil.getByClassType(prefix, String.class);
     }
+
 
 
 

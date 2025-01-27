@@ -39,7 +39,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
         log.info("======= " + requestURI+" =======");
 
-        checkToken(request);
+        checkTokenInfoFromHeader(request);
 
         // antMatcher + 정규식으로 표현해줘야함, return 던져버리기
 
@@ -88,12 +88,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
      * 토큰 검사
      * access_token, refresh_token 검사
      */
-    private void checkToken(HttpServletRequest request) {
+    private void checkTokenInfoFromHeader(HttpServletRequest request) {
         checkAccessToken(request);
     }
 
 
-    private boolean checkAccessToken(HttpServletRequest request){
+    private void checkAccessToken(HttpServletRequest request){
 
         //accessToken 검사
         try{
@@ -103,11 +103,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             String refreshToken = jwtUtils.getRefreshTokenFromHeader(request);
 
             String accessTokenFromRedis = getAccessTokenFromRedis(accessToken, refreshToken);
-            log.info("header : " + accessToken);
-            log.info("redis : " + accessTokenFromRedis);
+            log.info("====== accessToken from header : " + accessToken);
+            log.info("====== accessToken from redis : " + accessTokenFromRedis);
 
             jwtUtils.validateAccessToken(accessToken); // access token 형식, 만료시간 등 검사
 
+            // header와 redis의 accessToken 비교
             if (accessToken.equals(accessTokenFromRedis)) {
                 setUserInSecurityContext(request, accessToken);
 
@@ -125,7 +126,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
         }
 
-        return true;
     }
 
 
@@ -138,11 +138,12 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             String refreshTokenFromRedis = getRefreshTokenFromRedis(refreshToken);
 
             log.info("========= Check Refresh Token==========");
-            log.info("header : " + refreshToken);
-            log.info("redis : " + refreshTokenFromRedis);
+            log.info("====== refreshToken from header : " + refreshToken);
+            log.info("====== refreshToken from redis : " + refreshTokenFromRedis);
 
             jwtUtils.validateRefreshToken(refreshToken);
 
+            // header와 redis의 refreshToken 비교
             if(refreshToken.equals(refreshTokenFromRedis)){
                 setUserInSecurityContext(request, refreshToken);
             }

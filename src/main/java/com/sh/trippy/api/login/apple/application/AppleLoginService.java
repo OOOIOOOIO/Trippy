@@ -16,7 +16,6 @@ import java.io.IOException;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class AppleLoginService {
 
@@ -42,8 +41,8 @@ public class AppleLoginService {
         String jwtRefreshToken = jwtUtils.generateRefreshToken(userId, appleResponseInfoResDto.getEmail(), appleResponseInfoResDto.getProvider(), paidFlag);
 
         // redis 저장
-//        tokenService.uploadAccessTokenToRedis(jwtAccessToken, userId);
-//        tokenService.uploadRefreshTokenToRedis(jwtRefreshToken, userId);
+        tokenService.uploadAccessTokenToRedis(jwtAccessToken, userId);
+        tokenService.uploadRefreshTokenToRedis(jwtRefreshToken, userId);
 
 
         return new UserTokenResDto(jwtAccessToken, jwtRefreshToken, existUser);
