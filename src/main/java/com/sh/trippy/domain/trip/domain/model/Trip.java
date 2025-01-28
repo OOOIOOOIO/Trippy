@@ -27,12 +27,14 @@ public class Trip extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long tripId;
-    private String country;
+    private String city;
     private String countryEmogi;
     private boolean abroadFlag;
     private LocalDate departureDate;
     private LocalDate arrivalDate;
     private boolean beenFlag;
+    private Double corpLat; // 위도
+    private Double corpLon; // 경도
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")
@@ -57,30 +59,34 @@ public class Trip extends BaseTimeEntity {
 
 
     @Builder
-    private Trip(String country, String countryEmogi, boolean abroadFlag, LocalDate departureDate, LocalDate arrivalDate, boolean beenFlag, Users user) {
-        this.country = country;
+    private Trip(String city, String countryEmogi, boolean abroadFlag, LocalDate departureDate, LocalDate arrivalDate, boolean beenFlag, Double corpLat, Double corpLon, Users user) {
+        this.city = city;
         this.countryEmogi = countryEmogi;
         this.abroadFlag = abroadFlag;
         this.departureDate = departureDate;
         this.arrivalDate = arrivalDate;
         this.beenFlag = beenFlag;
+        this.corpLat = corpLat;
+        this.corpLon = corpLon;
         this.users = user;
     }
 
     public static Trip createTrip(TripCreateReqDto tripCreateReqDto, Users user){
         return Trip.builder()
-                .country(tripCreateReqDto.getCountry())
+                .city(tripCreateReqDto.getCity())
                 .countryEmogi(tripCreateReqDto.getCountryEmogi())
                 .abroadFlag(tripCreateReqDto.isAbroadFlag())
                 .departureDate(tripCreateReqDto.getDepartureDate())
                 .arrivalDate(tripCreateReqDto.getArrivalDate())
                 .beenFlag(false)
+                .corpLat(tripCreateReqDto.getCorpLat())
+                .corpLon(tripCreateReqDto.getCorpLon())
                 .user(user)
                 .build();
     }
 
     public void updateTrip(TripUpdateReqDto tripUpdateReqDto){
-        this.country = tripUpdateReqDto.getCountry();
+        this.city = tripUpdateReqDto.getCity();
         this.countryEmogi = tripUpdateReqDto.getCountryEmogi();
         this.abroadFlag = tripUpdateReqDto.isAbroadFlag();
         this.departureDate = tripUpdateReqDto.getDepartureDate();

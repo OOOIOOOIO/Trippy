@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Getter
@@ -13,10 +14,10 @@ public class TripGetInfoResDto {
     //여행 정보
     private TripInfoResDto tripInfoResDto;
     //여행 계획(리스트)
-    private List<TripPlanInfoResDto> tripPlanInfoResDtoList;
+    private List<LocalDate> tripDateList;
 
-    public TripGetInfoResDto(TripInfoResDto tripInfoResDto, List<TripPlanInfoResDto> tripPlanInfoResDtoList) {
+    public TripGetInfoResDto(TripInfoResDto tripInfoResDto, List<LocalDate> tripDateList) {
         this.tripInfoResDto = tripInfoResDto;
-        this.tripPlanInfoResDtoList = tripPlanInfoResDtoList;
+        this.tripDateList = tripDateList;
     }
 }

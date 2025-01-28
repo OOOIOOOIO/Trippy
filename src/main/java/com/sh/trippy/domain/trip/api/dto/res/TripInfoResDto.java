@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TripInfoResDto {
-    String country;
+    String city;
     String countryEmogi;
     LocalDate departureDate;
     LocalDate arrivalDate;
@@ -20,9 +20,11 @@ public class TripInfoResDto {
     int companionCnt; // 동반인 n명과 함께~
     List<TripCompanionUserInfoResDto> tripCompanionUserInfoList; // 동반인 n명의 유저 정보
     int dDay; // dDay -> 계산
+    private Double corpLat; // 위도
+    private Double corpLon; // 경도
 
     public TripInfoResDto(Trip trip) {
-        this.country = trip.getCountry();
+        this.city = trip.getCity();
         this.countryEmogi = trip.getCountryEmogi();
         this.departureDate = trip.getDepartureDate();
         this.arrivalDate = trip.getArrivalDate();
@@ -31,6 +33,8 @@ public class TripInfoResDto {
         this.companionCnt = 0;
         this.tripCompanionUserInfoList = null;
         this.dDay = 0;
+        this.corpLat = trip.getCorpLat();
+        this.corpLon = trip.getCorpLon();
 
     }
 

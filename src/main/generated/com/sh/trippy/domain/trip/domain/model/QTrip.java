@@ -30,7 +30,11 @@ public class QTrip extends EntityPathBase<Trip> {
 
     public final BooleanPath beenFlag = createBoolean("beenFlag");
 
-    public final StringPath country = createString("country");
+    public final StringPath city = createString("city");
+
+    public final NumberPath<Double> corpLat = createNumber("corpLat", Double.class);
+
+    public final NumberPath<Double> corpLon = createNumber("corpLon", Double.class);
 
     public final StringPath countryEmogi = createString("countryEmogi");
 

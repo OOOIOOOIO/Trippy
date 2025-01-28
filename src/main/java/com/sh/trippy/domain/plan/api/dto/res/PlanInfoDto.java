@@ -18,6 +18,8 @@ public class PlanInfoDto {
     private String memo;
     private int priority;
     private LocalDate tripDate;
+    private Double corpLat; // 위도
+    private Double corpLon; // 경도
 
     public PlanInfoDto(Plan plan) {
         this.title = plan.getTitle();
@@ -26,5 +28,8 @@ public class PlanInfoDto {
         this.memo = plan.getMemo();
         this.priority = plan.getPriority();
         this.tripDate = plan.getTripDate();
+        this.corpLat = plan.getCorpLat();
+        this.corpLon = plan.getCorpLon();
     }
+
 }

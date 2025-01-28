@@ -17,4 +17,6 @@ public class PlanUpdateReqDto {
     private String memo;
     private int priority;
     private LocalDate tripDate;
+    private Double corpLat; // 위도
+    private Double corpLon; // 경도
 }

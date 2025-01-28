@@ -31,20 +31,25 @@ public class Plan extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private CompleteStatus completeStatus;
 
+    private Double corpLat; // 위도
+    private Double corpLon; // 경도
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tripId")
     private Trip trip;
 
     @Builder
-    private Plan(String title, LocalDate tripDate, String place, LocalDateTime plannedAt, String memo, Integer priority, Trip trip) {
+    private Plan(String title, LocalDate tripDate, String place, LocalDateTime plannedAt, String memo, Integer priority, Double corpLat, Double corpLon, Trip trip) {
         this.title = title;
         this.tripDate = tripDate;
         this.place = place;
         this.plannedAt = plannedAt;
         this.memo = memo;
         this.priority = priority;
-        this.trip = trip;
         this.completeStatus = CompleteStatus.WAIT;
+        this.corpLat = corpLat;
+        this.corpLon = corpLon;
+        this.trip = trip;
     }
 
     public static Plan createPlan(PlanCreateReqDto planCreateReqDto, Trip trip) {
@@ -55,6 +60,8 @@ public class Plan extends BaseTimeEntity {
                 .plannedAt(planCreateReqDto.getPlannedAt())
                 .memo(planCreateReqDto.getMemo())
                 .priority(planCreateReqDto.getPriority())
+                .corpLat(planCreateReqDto.getCorpLat())
+                .corpLon(planCreateReqDto.getCorpLon())
                 .trip(trip)
                 .build();
 
@@ -67,6 +74,8 @@ public class Plan extends BaseTimeEntity {
         this.plannedAt = planUpdateReqDto.getPlannedAt();
         this.memo = planUpdateReqDto.getMemo();
         this.priority = planUpdateReqDto.getPriority();
+        this.corpLat = planUpdateReqDto.getCorpLat();
+        this.corpLon = planUpdateReqDto.getCorpLon();
     }
 
     public void updateCompleteStatus(CompleteStatus completeStatus){

@@ -10,11 +10,13 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TripUpdateReqDto {
 
-    private String country;
+    private String city;
     private String countryEmogi;
     private boolean abroadFlag;
     private LocalDate departureDate;
     private LocalDate arrivalDate;
     private boolean beenFlag;
+    private Double corpLat; // 위도
+    private Double corpLon; // 경도
 
 }

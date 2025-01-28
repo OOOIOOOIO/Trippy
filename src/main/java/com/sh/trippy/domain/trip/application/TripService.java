@@ -70,13 +70,17 @@ public class TripService {
         tripInfoResDto.setDDay(calculateDDay(trip.getDepartureDate(), trip.getArrivalDate()));
 
 
-        //여행 계획(리스트), tripDate 오름차순 -> {"date" : {~~~}} 이케 수정해야 함
-        List<TripPlanInfoResDto> tripPlanInfoResDtoList = planRepository.findAllByTripOrderByTripDate(trip).stream()
-                .map(TripPlanInfoResDto::new)
-                .collect(Collectors.toList());
+        //여행 계획에 해당하는 날짜 리스트
+        List<LocalDate> tripDateList = getTripDateList(trip.getDepartureDate(), trip.getArrivalDate());
 
 
-        TripGetInfoResDto tripGetInfoResDto = new TripGetInfoResDto(tripInfoResDto, tripPlanInfoResDtoList);
+//        여행 계획(리스트), tripDate 오름차순 -> {"date" : {~~~}} 이케 수정해야 함
+//        List<TripPlanInfoResDto> tripPlanInfoResDtoList = planRepository.findAllByTripOrderByTripDate(trip).stream()
+//                .map(TripPlanInfoResDto::new)
+//                .collect(Collectors.toList());
+
+
+        TripGetInfoResDto tripGetInfoResDto = new TripGetInfoResDto(tripInfoResDto, tripDateList);
 
         return tripGetInfoResDto;
     }
@@ -145,6 +149,8 @@ public class TripService {
 
     /**
      * d-day 구하기
+     * 도착일 포함 X
+     * eX) 12/1 ~ 12/2 : betweenCnt = 1
      * @param departureDate
      * @param arrivalDate
      * @return
@@ -154,6 +160,19 @@ public class TripService {
         int betweenCnt = (int)ChronoUnit.DAYS.between(departureDate, arrivalDate);
 
         return betweenCnt;
+    }
+
+    private List<LocalDate> getTripDateList(LocalDate departureDate, LocalDate arrivalDate){
+        List<LocalDate> tripDateList = new ArrayList<>();
+
+        int between = (int) ChronoUnit.DAYS.between(departureDate, arrivalDate); // 도착일 포함X
+
+        for(int i = 0; i <= between; i++){
+            LocalDate localDate = departureDate.plusDays(i);
+            tripDateList.add(localDate);
+        }
+
+        return tripDateList;
     }
 
 
