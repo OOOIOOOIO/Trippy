@@ -1,6 +1,7 @@
 package com.sh.trippy.global.config;
 
 import com.sh.trippy.api.jwt.application.TokenService;
+import com.sh.trippy.global.filter.CheckPaidVersionFilter;
 import com.sh.trippy.global.jwt.AuthEntryPointJwt;
 import com.sh.trippy.global.jwt.AuthTokenFilter;
 import com.sh.trippy.global.jwt.JwtExceptionHandlerFilter;
@@ -31,7 +32,6 @@ import java.util.Collections;
 public class WebSecurityConfig {  // extends WebSecurityConfigurerAdapte, Spring 2.7.0부터 Deprecated 됨(현재 프로젝트 2.7.6)
 
     private final AuthEntryPointJwt authEntryPointJwt;
-//    private final AuthTokenFilter authTokenFilter;
     private final JwtExceptionHandlerFilter jwtExceptionHandlerFilter;
     private final JwtUtils jwtUtils;
     private final CustomUserDetailsService customUserDetailsService;
@@ -69,8 +69,6 @@ public class WebSecurityConfig {  // extends WebSecurityConfigurerAdapte, Spring
                                 .requestMatchers("/api/apple/**").permitAll()
                                 .requestMatchers("/api/google/**").permitAll()
                                 .requestMatchers("/api/token/reissue/**").permitAll()
-                                .requestMatchers("/login/oauth2/code/**").permitAll()
-                                .requestMatchers("/login/oauth2/redirect/**").permitAll()
                                 .requestMatchers("/favicon.ico").permitAll()
                                 .requestMatchers("/swagger-ui/**").permitAll()
                                 .requestMatchers("/api-docs/**").permitAll()
@@ -83,8 +81,39 @@ public class WebSecurityConfig {  // extends WebSecurityConfigurerAdapte, Spring
                 .exceptionHandling(handling -> handling.authenticationEntryPoint(authEntryPointJwt));
 
 
-        http.addFilterBefore(new AuthTokenFilter(jwtUtils, customUserDetailsService, tokenService), UsernamePasswordAuthenticationFilter.class); // 여기서 jwt 인증
+        http.addFilterBefore(new AuthTokenFilter(jwtUtils, customUserDetailsService, tokenService), CheckPaidVersionFilter.class); // 여기서 jwt 인증
         http.addFilterBefore(jwtExceptionHandlerFilter, AuthTokenFilter.class); // jwt 예외처리 필터
+
+        return http.build();
+
+    }
+
+    @Bean
+    public SecurityFilterChain checkPaidVersionFilterChain(HttpSecurity http) throws Exception{
+
+
+        http
+                .httpBasic(HttpBasicConfigurer::disable)
+                .cors(corsConfigurationSource -> corsConfigurationSource.configurationSource(corsConfigurationSource()))
+                .csrf(AbstractHttpConfigurer::disable)
+
+                // disable session
+                .sessionManagement((sessionManagement) ->
+                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .authorizeHttpRequests(authorizeRequest ->
+                                authorizeRequest
+                                        .requestMatchers("/api/trip/reply/**").authenticated()
+                                        .requestMatchers("/api/trip/checklist/**").permitAll()
+//                                        .requestMatchers("/api/trip/checklist/**").permitAll()
+//                                .requestMatchers("Request Path").permitAll()
+                                        .anyRequest().permitAll()
+                )
+
+                .exceptionHandling(handling -> handling.authenticationEntryPoint(authEntryPointJwt));
+
+
+        http.addFilterBefore(new CheckPaidVersionFilter(jwtUtils, customUserDetailsService, tokenService), UsernamePasswordAuthenticationFilter.class); // 여기서 jwt 인증
 
         return http.build();
 

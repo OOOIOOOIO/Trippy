@@ -36,13 +36,14 @@ public class JwtExceptionHandlerFilter extends OncePerRequestFilter {
             handleJwtCustomException(response, new JwtCustomException((JwtCustomErrorCode.AccessTokenExpiredException)));
         } catch (UnsupportedJwtException e) {
             handleJwtCustomException(response, new JwtCustomException((JwtCustomErrorCode.UnsupportedJwtException)));
+        } catch (JwtCustomException e){
+            handleJwtCustomException(response, new JwtCustomException((e.getJwtCustomErrorCode())));
         } catch (IllegalArgumentException e) {
-            log.error("============ ERROR " + e.getMessage());
             handleCustomException(response, new CustomException((CustomErrorCode.IllegalArgumentException)));
         } catch (UsernameNotFoundException e) {
             handleCustomException(response, new CustomException((CustomErrorCode.UsernameNotFoundException)));
-        } catch (JwtCustomException e){
-            handleJwtCustomException(response, new JwtCustomException((e.getJwtCustomErrorCode())));
+        } catch (CustomException e){
+            handleCustomException(response, new CustomException(CustomErrorCode.NotPaidVersionException));
         }
     }
 

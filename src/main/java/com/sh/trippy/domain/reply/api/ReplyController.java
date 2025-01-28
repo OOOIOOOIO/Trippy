@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/trip")
+@RequestMapping("/api/trip/reply")
 public class ReplyController {
 
     private final ReplyService replyService;
@@ -34,7 +34,7 @@ public class ReplyController {
             description = "여행에 대해 댓글 조회 성공 후, 댓글 리스트로 리턴"
     )
     @LogTrace
-    @GetMapping("/{tripId}/reply")
+    @GetMapping("/{tripId}")
     public ResponseEntity<ReplyResDto> getTripReply(@PathVariable(name = "tripId") Long tripId,
                                                @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
@@ -53,7 +53,7 @@ public class ReplyController {
             description = "여행에 대해 댓글 생성 성공 후, success(String) 리턴"
     )
     @LogTrace
-    @PostMapping("/{tripId}/reply")
+    @PostMapping("/{tripId}")
     public ResponseEntity<String> createTripReply(@PathVariable(name = "tripId") Long tripId,
                                   @RequestBody ReplyCreateReqDto replyCreateReqDto,
                                   @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto) {
@@ -90,7 +90,7 @@ public class ReplyController {
             description = "여행에 대해 댓글 삭제 성공 후, success(String) 리턴"
     )
     @LogTrace
-    @DeleteMapping("/reply/{replyId}")
+    @DeleteMapping("/{replyId}")
     public ResponseEntity<String> deleteTripReply(@PathVariable(name = "replyId") Long replyId,
                                   @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 

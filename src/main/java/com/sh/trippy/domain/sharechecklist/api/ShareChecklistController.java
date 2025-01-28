@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/trip")
-public class ShareChecklist {
+@RequestMapping("/api/trip/checklist")
+public class ShareChecklistController {
 
     @Operation(
             summary = "여행에 대한 공유 체크리스트 조회 API",
@@ -26,7 +26,7 @@ public class ShareChecklist {
             description = "여행에 대한 공유 체크리스트 조회 성공 후, 체크리스트 정보 리스트로 리턴"
     )
     @LogTrace
-    @GetMapping("/{tripId}/checklist")
+    @GetMapping("/{tripId}")
     public String getTripReply(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
 
@@ -43,7 +43,7 @@ public class ShareChecklist {
             description = "여행에 대한 공유 체크리스트 생성 성공 후, success(String) 리턴"
     )
     @LogTrace
-    @PostMapping("/{tripId}/checklist")
+    @PostMapping("/{tripId}")
     public String createTripReply(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
 
@@ -60,7 +60,7 @@ public class ShareChecklist {
             description = "여행에 대한 공유 체크리스트 수정 성공 후, success(String) 리턴"
     )
     @LogTrace
-    @PutMapping("/{tripId}/checklist/{shId}")
+    @PutMapping("/{tripId}/{shId}")
     public String updateTripReply(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
 
@@ -77,7 +77,7 @@ public class ShareChecklist {
             description = "여행에 대한 공유 체크리스트 삭제 성공 후, success(String) 리턴"
     )
     @LogTrace
-    @DeleteMapping("/{tripId}/checklist/{shId}")
+    @DeleteMapping("/{tripId}/{shId}")
     public String deleteTripReply(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
 

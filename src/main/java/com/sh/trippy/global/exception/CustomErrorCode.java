@@ -22,6 +22,7 @@ public enum CustomErrorCode {
     MethodNotAllowedException(BAD_REQUEST,"C009", "잘못된 메서드 요청입니다."),
     DuplicateEmailException(BAD_REQUEST,"C010", "중복된 email입니다."),
     AlreadyPaidVersionException(BAD_REQUEST, "C11", "이미 유료버전을 구매하였습니다."),
+    NotPaidVersionException(BAD_REQUEST, "C11", "이미 유료버전을 구매하였습니다."),
 
 
 

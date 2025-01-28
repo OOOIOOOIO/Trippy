@@ -35,9 +35,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        log.info("======= Request Path =========");
+        log.info("======= AuthTokenFilter =========");
         String requestURI = request.getRequestURI();
-        log.info("======= " + requestURI+" =======");
+        log.info("======= Request Path : " + requestURI+" =======");
 
         checkTokenInfoFromHeader(request);
 
@@ -55,9 +55,9 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 "/api/apple/logout",
                 "/api/google/login",
                 "/api/google/logout",
+                "/api/token/reissue",
                 "/api/token/reissue/access",
                 "/api/token/reissue/refresh",
-                "/login/oauth2/redirect",
                 "/favicon.ico",
                 "/swagger-ui/index.html",
                 "/swagger-ui/favicon-16x16.png",
