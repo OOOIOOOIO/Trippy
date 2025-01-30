@@ -3,7 +3,6 @@ package com.sh.trippy.domain.plan.api;
 import com.sh.trippy.domain.plan.api.dto.req.PlanCreateReqDto;
 import com.sh.trippy.domain.plan.api.dto.req.PlanUpdateReqDto;
 import com.sh.trippy.domain.plan.application.PlanService;
-import com.sh.trippy.domain.user.api.dto.UserInfoResDto;
 import com.sh.trippy.global.log.LogTrace;
 import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeader;
 import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeaderDto;

@@ -1,6 +1,8 @@
 package com.sh.trippy.api.home.controller;
 
-import com.sh.trippy.domain.user.api.dto.UserInfoResDto;
+import com.sh.trippy.api.home.application.HomeService;
+import com.sh.trippy.api.home.controller.dto.HomeResDto;
+import com.sh.trippy.domain.user.api.dto.MypageUserInfoResDto;
 import com.sh.trippy.global.log.LogTrace;
 import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeader;
 import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeaderDto;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/home")
 public class HomeController {
 
+    private final HomeService homeService;
 
     @Operation(
             summary = "홈 화면 조회 API",
@@ -34,10 +37,11 @@ public class HomeController {
     )
     @LogTrace
     @GetMapping("")
-    public ResponseEntity<UserInfoResDto> getHomeInfo(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+    public ResponseEntity<HomeResDto> getHomeInfo(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
+        HomeResDto homeInfo = homeService.getHomeInfo(userInfoFromHeaderDto);
 
-        return new ResponseEntity<>(null, HttpStatus.OK);
+        return new ResponseEntity<>(homeInfo, HttpStatus.OK);
     }
 
 }

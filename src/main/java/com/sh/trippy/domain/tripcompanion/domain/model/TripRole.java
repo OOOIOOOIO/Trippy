@@ -12,6 +12,6 @@ public enum TripRole {
     USER("GUEST", "게스트");
 
     private final String key;
-    private final String role;
+    private final String value;
 
 }

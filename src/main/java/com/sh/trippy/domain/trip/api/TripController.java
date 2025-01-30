@@ -4,7 +4,6 @@ import com.sh.trippy.domain.trip.api.dto.req.TripCreateReqDto;
 import com.sh.trippy.domain.trip.api.dto.req.TripUpdateReqDto;
 import com.sh.trippy.domain.trip.api.dto.res.TripGetInfoResDto;
 import com.sh.trippy.domain.trip.application.TripService;
-import com.sh.trippy.domain.user.api.dto.UserInfoResDto;
 import com.sh.trippy.global.log.LogTrace;
 import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeader;
 import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeaderDto;

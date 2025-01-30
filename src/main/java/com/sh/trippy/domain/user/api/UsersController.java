@@ -1,8 +1,7 @@
 package com.sh.trippy.domain.user.api;
 
 import com.sh.trippy.api.login.UserTokenResDto;
-import com.sh.trippy.domain.user.api.dto.UserInfoResDto;
-import com.sh.trippy.domain.user.api.dto.UserInfoUpdateReqDto;
+import com.sh.trippy.domain.user.api.dto.MypageUserInfoResDto;
 import com.sh.trippy.domain.user.application.UsersService;
 import com.sh.trippy.global.log.LogTrace;
 import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeader;
@@ -77,9 +76,9 @@ public class UsersController {
     )
     @LogTrace
     @GetMapping("/mypage")
-    public ResponseEntity<UserInfoResDto> getMypageProfile(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+    public ResponseEntity<MypageUserInfoResDto> getMypageProfile(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
 
-        UserInfoResDto userInfo = usersService.getMypageProfile(userInfoFromHeaderDto.getUserId());
+        MypageUserInfoResDto userInfo = usersService.getMypageProfile(userInfoFromHeaderDto.getUserId());
 
         return new ResponseEntity<>(userInfo, HttpStatus.OK);
     }

@@ -1,10 +1,11 @@
 package com.sh.trippy.domain.user.application;
 
 
+import com.sh.trippy.api.home.controller.dto.HomeUserInfoResDto;
 import com.sh.trippy.api.jwt.application.TokenService;
 import com.sh.trippy.api.login.UserTokenResDto;
 import com.sh.trippy.api.login.apple.controller.dto.AppleResponseInfoResDto;
-import com.sh.trippy.domain.user.api.dto.UserInfoResDto;
+import com.sh.trippy.domain.user.api.dto.MypageUserInfoResDto;
 import com.sh.trippy.domain.user.domain.Role;
 import com.sh.trippy.domain.user.domain.Users;
 import com.sh.trippy.domain.user.domain.repository.UsersRepository;
@@ -41,6 +42,17 @@ public class UsersService {
     @Value("${file.path}")
     private String filePath;
 
+
+    /**
+     * ============================================== USER ===========================================================
+     */
+
+    @LogTrace
+    public HomeUserInfoResDto getUserInfo(UserInfoFromHeaderDto userInfoFromHeaderDto){
+        Users users = usersRepository.findById(userInfoFromHeaderDto.getUserId()).orElseThrow(() -> new CustomException(CustomErrorCode.UserNotFoundException));
+
+        return new HomeUserInfoResDto(users);
+    }
 
     /**
      * 탈퇴하기
@@ -92,7 +104,7 @@ public class UsersService {
 
 
     /**
-     * =========================================================================================================
+     * ================================================ LOGIN =========================================================
      */
 
 
@@ -163,12 +175,12 @@ public class UsersService {
      *
      */
     @LogTrace
-    public UserInfoResDto getMypageProfile(Long userId){
+    public MypageUserInfoResDto getMypageProfile(Long userId){
         Users users = usersRepository.findById(userId).orElseThrow(() -> new CustomException(CustomErrorCode.UserNotFoundException));
 
-        UserInfoResDto userInfoResDto = new UserInfoResDto(users);
+        MypageUserInfoResDto mypageUserInfoResDto = new MypageUserInfoResDto(users);
 
-        return userInfoResDto;
+        return mypageUserInfoResDto;
 
     }
 
