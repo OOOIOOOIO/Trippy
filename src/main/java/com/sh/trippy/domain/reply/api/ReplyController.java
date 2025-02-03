@@ -35,8 +35,7 @@ public class ReplyController {
     )
     @LogTrace
     @GetMapping("/{tripId}")
-    public ResponseEntity<ReplyResDto> getTripReply(@PathVariable(name = "tripId") Long tripId,
-                                               @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+    public ResponseEntity<ReplyResDto> getTripReply(@PathVariable(name = "tripId") Long tripId){
 
         ReplyResDto tripReply = replyService.getTripReply(tripId);
 
@@ -91,8 +90,7 @@ public class ReplyController {
     )
     @LogTrace
     @DeleteMapping("/{replyId}")
-    public ResponseEntity<String> deleteTripReply(@PathVariable(name = "replyId") Long replyId,
-                                  @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+    public ResponseEntity<String> deleteTripReply(@PathVariable(name = "replyId") Long replyId){
 
         replyService.deleteReply(replyId);
 

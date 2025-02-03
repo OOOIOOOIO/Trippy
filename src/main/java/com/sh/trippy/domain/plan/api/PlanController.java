@@ -2,8 +2,8 @@ package com.sh.trippy.domain.plan.api;
 
 import com.sh.trippy.domain.plan.api.dto.req.PlanCreateReqDto;
 import com.sh.trippy.domain.plan.api.dto.req.PlanUpdateReqDto;
+import com.sh.trippy.domain.plan.api.dto.res.PlanInfoResDto;
 import com.sh.trippy.domain.plan.application.PlanService;
-import com.sh.trippy.domain.user.api.dto.UserInfoResDto;
 import com.sh.trippy.global.log.LogTrace;
 import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeader;
 import com.sh.trippy.global.resolver.token.userinfo.UserInfoFromHeaderDto;
@@ -37,12 +37,12 @@ public class PlanController {
     )
     @LogTrace
     @GetMapping("/{tripId}/plan")
-    public ResponseEntity<String> getTripPlan(@PathVariable(name = "tripId") Long tripId,
-                              @RequestParam(name = "tripDate") LocalDate tripDate,
-                              @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+    public ResponseEntity<PlanInfoResDto> getTripPlan(@PathVariable(name = "tripId") Long tripId,
+                              @RequestParam(name = "tripDate") LocalDate tripDate){
 
+        PlanInfoResDto tripPlan = planService.getTripPlan(tripId, tripDate);
 
-        return new ResponseEntity<>("success", HttpStatus.OK);
+        return new ResponseEntity<>(tripPlan, HttpStatus.OK);
     }
 
 
@@ -57,8 +57,7 @@ public class PlanController {
     @LogTrace
     @PostMapping("/{tripId}/plan")
     public ResponseEntity<String> createTripPlan(@PathVariable(name = "tripId") Long tripId,
-                                 @RequestBody PlanCreateReqDto planCreateReqDto,
-                                 @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+                                 @RequestBody PlanCreateReqDto planCreateReqDto){
         planService.createTripPlan(tripId, planCreateReqDto);
 
 
@@ -77,8 +76,7 @@ public class PlanController {
     @LogTrace
     @PutMapping("/plan/{planId}")
     public ResponseEntity<String> updateTripPlan(@PathVariable(name = "planId") Long planId,
-                                 @RequestBody PlanUpdateReqDto planUpdateReqDto,
-                                 @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+                                 @RequestBody PlanUpdateReqDto planUpdateReqDto){
 
         planService.updateTripPlan(planId, planUpdateReqDto);
 
@@ -96,8 +94,7 @@ public class PlanController {
     )
     @LogTrace
     @DeleteMapping("/plan/{planId}")
-    public ResponseEntity<String> deleteTripPlan(@PathVariable(name = "planId") Long planId,
-                                 @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+    public ResponseEntity<String> deleteTripPlan(@PathVariable(name = "planId") Long planId){
 
         planService.deleteTripPlan(planId);
 
@@ -116,8 +113,7 @@ public class PlanController {
     )
     @LogTrace
     @PatchMapping("/plan/{planId}")
-    public ResponseEntity<String> updateCompleteStatus(@PathVariable(name = "planId") Long planId,
-                                 @UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto){
+    public ResponseEntity<String> updateCompleteStatus(@PathVariable(name = "planId") Long planId){
 
         planService.updateCompleteStatus(planId);
 

@@ -81,43 +81,44 @@ public class WebSecurityConfig {  // extends WebSecurityConfigurerAdapte, Spring
                 .exceptionHandling(handling -> handling.authenticationEntryPoint(authEntryPointJwt));
 
 
-        http.addFilterBefore(new AuthTokenFilter(jwtUtils, customUserDetailsService, tokenService), CheckPaidVersionFilter.class); // 여기서 jwt 인증
+//        http.addFilterBefore(new AuthTokenFilter(jwtUtils, customUserDetailsService, tokenService), CheckPaidVersionFilter.class); //
+        http.addFilterBefore(new AuthTokenFilter(jwtUtils, customUserDetailsService, tokenService), UsernamePasswordAuthenticationFilter.class); // 여기서 jwt 인증
         http.addFilterBefore(jwtExceptionHandlerFilter, AuthTokenFilter.class); // jwt 예외처리 필터
 
         return http.build();
 
     }
 
-    @Bean
-    public SecurityFilterChain checkPaidVersionFilterChain(HttpSecurity http) throws Exception{
-
-
-        http
-                .httpBasic(HttpBasicConfigurer::disable)
-                .cors(corsConfigurationSource -> corsConfigurationSource.configurationSource(corsConfigurationSource()))
-                .csrf(AbstractHttpConfigurer::disable)
-
-                // disable session
-                .sessionManagement((sessionManagement) ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
-                .authorizeHttpRequests(authorizeRequest ->
-                                authorizeRequest
-                                        .requestMatchers("/api/trip/reply/**").authenticated()
-                                        .requestMatchers("/api/trip/checklist/**").permitAll()
+//    @Bean
+//    public SecurityFilterChain checkPaidVersionFilterChain(HttpSecurity http) throws Exception{
+//
+//
+//        http
+//                .httpBasic(HttpBasicConfigurer::disable)
+//                .cors(corsConfigurationSource -> corsConfigurationSource.configurationSource(corsConfigurationSource()))
+//                .csrf(AbstractHttpConfigurer::disable)
+//
+//                // disable session
+//                .sessionManagement((sessionManagement) ->
+//                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+//                )
+//                .authorizeHttpRequests(authorizeRequest ->
+//                                authorizeRequest
+//                                        .requestMatchers("/api/trip/reply/**").authenticated()
 //                                        .requestMatchers("/api/trip/checklist/**").permitAll()
-//                                .requestMatchers("Request Path").permitAll()
-                                        .anyRequest().permitAll()
-                )
-
-                .exceptionHandling(handling -> handling.authenticationEntryPoint(authEntryPointJwt));
-
-
-        http.addFilterBefore(new CheckPaidVersionFilter(jwtUtils, customUserDetailsService, tokenService), UsernamePasswordAuthenticationFilter.class); // 여기서 jwt 인증
-
-        return http.build();
-
-    }
+////                                        .requestMatchers("/api/trip/checklist/**").permitAll()
+////                                .requestMatchers("Request Path").permitAll()
+//                                        .anyRequest().permitAll()
+//                )
+//
+//                .exceptionHandling(handling -> handling.authenticationEntryPoint(authEntryPointJwt));
+//
+//
+//        http.addFilterBefore(new CheckPaidVersionFilter(jwtUtils, customUserDetailsService, tokenService), UsernamePasswordAuthenticationFilter.class); // 여기서 유료버전 확인
+//
+//        return http.build();
+//
+//    }
 
     // CORS 설정
     CorsConfigurationSource corsConfigurationSource() {

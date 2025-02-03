@@ -1,13 +1,15 @@
 package com.sh.trippy.domain.trip.application;
 
+import com.sh.trippy.api.home.controller.dto.HomeTripInfoResDto;
+import com.sh.trippy.api.home.controller.dto.HomeTripStatusResDto;
 import com.sh.trippy.domain.plan.domain.repository.PlanRepository;
 import com.sh.trippy.domain.trip.api.dto.req.TripCreateReqDto;
 import com.sh.trippy.domain.trip.api.dto.req.TripUpdateReqDto;
 import com.sh.trippy.domain.trip.api.dto.res.TripCompanionUserInfoResDto;
 import com.sh.trippy.domain.trip.api.dto.res.TripGetInfoResDto;
 import com.sh.trippy.domain.trip.api.dto.res.TripInfoResDto;
-import com.sh.trippy.domain.trip.api.dto.res.TripPlanInfoResDto;
 import com.sh.trippy.domain.trip.domain.model.Trip;
+import com.sh.trippy.domain.trip.domain.repository.TripQueryRepository;
 import com.sh.trippy.domain.trip.domain.repository.TripRepository;
 import com.sh.trippy.domain.tripcompanion.domain.model.TripCompanion;
 import com.sh.trippy.domain.user.domain.Users;
@@ -25,7 +27,6 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -34,6 +35,7 @@ import java.util.stream.Collectors;
 public class TripService {
 
     private final TripRepository tripRepository;
+    private final TripQueryRepository tripQueryRepository;
     private final PlanRepository planRepository;
     private final UsersRepository usersRepository;
 
@@ -67,7 +69,7 @@ public class TripService {
         }
 
         //d-day추가
-        tripInfoResDto.setDDay(calculateDDay(trip.getDepartureDate(), trip.getArrivalDate()));
+        tripInfoResDto.setDDay(calculateDDay(trip.getDepartureDate()));
 
 
         //여행 계획에 해당하는 날짜 리스트
@@ -139,6 +141,50 @@ public class TripService {
 
 
     /**
+     * Home - 여행 리스트 조회
+     */
+    @LogTrace
+    public List<HomeTripInfoResDto> getTripList(UserInfoFromHeaderDto userInfoFromHeaderDto){
+        Users users = usersRepository.findById(userInfoFromHeaderDto.getUserId()).orElseThrow(() -> new CustomException(CustomErrorCode.UserNotFoundException));
+
+
+//        List<HomeTripInfoResDto> homeTripInfoResDtoList = tripQueryRepository.getTripListByUserId(users.getUserId())
+//                .stream()
+//                .map(HomeTripInfoResDto::new)
+//                .collect(Collectors.toList());
+
+        List<Trip> tripList = tripQueryRepository.getTripListByUserId(users.getUserId());
+        List<HomeTripInfoResDto> homeTripInfoResDtoList = new ArrayList<>();
+
+
+        for (Trip trip : tripList) {
+
+            HomeTripInfoResDto homeTripInfoResDto = new HomeTripInfoResDto(trip);
+
+            // 동반자
+            List<TripCompanion> tripCompanionList = trip.getTripCompanionList();
+
+            if(tripCompanionList != null){
+                // 동반자 수 추가
+                homeTripInfoResDto.setCompanionCnt(tripCompanionList.size());
+
+            }
+
+            //d-day추가
+            homeTripInfoResDto.setDDay(calculateDDay(trip.getDepartureDate()));
+
+
+            homeTripInfoResDtoList.add(homeTripInfoResDto);
+        }
+
+
+
+        return homeTripInfoResDtoList;
+
+    }
+
+
+    /**
      * 유저 조회
      */
     @LogTrace
@@ -152,12 +198,14 @@ public class TripService {
      * 도착일 포함 X
      * eX) 12/1 ~ 12/2 : betweenCnt = 1
      * @param departureDate
-     * @param arrivalDate
      * @return
      */
-    private int calculateDDay(LocalDate departureDate, LocalDate arrivalDate){
+    private int calculateDDay(LocalDate departureDate){
+        LocalDate now = LocalDate.now();
 
-        int betweenCnt = (int)ChronoUnit.DAYS.between(departureDate, arrivalDate);
+        int betweenCnt = (int)ChronoUnit.DAYS.between(now, departureDate);
+
+        if(betweenCnt < 0) return 0;
 
         return betweenCnt;
     }

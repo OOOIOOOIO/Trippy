@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PlanInfoDto {
 
+    private Long planId;
     private String title;
     private String place;
     private LocalDateTime plannedAt;
@@ -22,6 +23,7 @@ public class PlanInfoDto {
     private Double corpLon; // 경도
 
     public PlanInfoDto(Plan plan) {
+        this.planId = plan.getPlanId();
         this.title = plan.getTitle();
         this.place = plan.getPlace();
         this.plannedAt = plan.getPlannedAt();

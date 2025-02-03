@@ -20,7 +20,7 @@ public class TokenService {
 
 
     /**
-     * token(access, refresh) 저장
+     * redis에 token(access, refresh) 저장
      */
     public void uploadAccessTokenToRedis(String token, Long userId){
         redisUtil.putString(ACCESS_TOKEN.prefix() + userId, token, jwtInfoProperties.getAccessTokenExpireMin());
@@ -33,11 +33,22 @@ public class TokenService {
 
         System.out.println();
     }
+
+
     /**
-     * token(access, refresh) 가져오기
+     * redis에서 token(access, refresh) 가져오기
      */
     public String getTokenFromRedis(String prefix){
         return redisUtil.getByClassType(prefix, String.class);
+    }
+
+
+    /**
+     * redis에서 token 삭제
+     */
+    public void deleteTokenFromRedis(String accessPrefix, String refreshPrefix){
+        redisUtil.deleteKey(accessPrefix);
+        redisUtil.deleteKey(refreshPrefix);
     }
 
 

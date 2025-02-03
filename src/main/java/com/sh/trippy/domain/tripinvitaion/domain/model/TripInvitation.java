@@ -19,8 +19,8 @@ public class TripInvitation {
     @JoinColumn(name = "trip")
     private Trip trip;
 
-    private Long userFrom;
-    private Long userTo;
+    private Long userFrom; // host
+    private Long userTo; // guest
 
 
 }
