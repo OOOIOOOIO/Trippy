@@ -9,6 +9,7 @@ import com.sh.trippy.domain.user.api.dto.MypageUserInfoResDto;
 import com.sh.trippy.domain.user.domain.Role;
 import com.sh.trippy.domain.user.domain.Users;
 import com.sh.trippy.domain.user.domain.repository.UsersRepository;
+import com.sh.trippy.global.common.RedisConst;
 import com.sh.trippy.global.exception.CustomErrorCode;
 import com.sh.trippy.global.exception.CustomException;
 import com.sh.trippy.global.jwt.JwtUtils;
@@ -63,11 +64,15 @@ public class UsersService {
     public void cancelAccount(UserInfoFromHeaderDto userInfoFromHeaderDto){
         Users users = usersRepository.findById(userInfoFromHeaderDto.getUserId()).orElseThrow(() -> new CustomException(CustomErrorCode.UserNotFoundException));
 
+        Long userId = users.getUserId();
         if(userInfoFromHeaderDto.getProvider().equals("apple")){
             appleLoginClient.logoutAppleAccount(users.getRefreshToken());
         }
 
+        // redis에서 토큰 삭제
+        tokenService.deleteTokenFromRedis(RedisConst.ACCESS_TOKEN.prefix() + userId, RedisConst.REFRESH_TOKEN.prefix() + userId);
 
+        // db에서 유저 삭제
         usersRepository.delete(users);
     }
 
@@ -191,9 +196,13 @@ public class UsersService {
     public Long saveMypageProfile(Long userId, String nickname, String motherLand, MultipartFile file){
         Users users = usersRepository.findById(userId).orElseThrow(() -> new CustomException(CustomErrorCode.UserNotFoundException));
 
+        String profileImg = null;
+
         // S3에 저장
-        String profileImg = amazonS3Service.uploadFile(file);
-        log.info("===== profile img link : " + profileImg + "=====");
+        if(file != null){
+            profileImg = amazonS3Service.uploadFile(file);
+            log.info("===== profile img link : " + profileImg + "=====");
+        }
 
         users.updateUserInfo(nickname, profileImg, motherLand);
 
@@ -212,12 +221,19 @@ public class UsersService {
         Users users = usersRepository.findById(userId).orElseThrow(() -> new CustomException(CustomErrorCode.UserNotFoundException));
 
         String pastProfileImg = users.getProfileImg();
+        String newProfileImg = null;
 
-        // S3에서 삭제
-        amazonS3Service.delete(pastProfileImg);
+        // 이미 사진이 존재하고 새로운 사진이 있을 경우
+        if(file != null && pastProfileImg != null){
+            // S3에서 삭제
+            amazonS3Service.delete(pastProfileImg);
+        }
+        else if(file != null) { // 기본 사진이고 새로운 사진으로 변경할 경우
+            // S3에 저장
+            newProfileImg = amazonS3Service.uploadFile(file);
+        }
 
-        // S3에 저장
-        String newProfileImg = amazonS3Service.uploadFile(file);
+
 
         users.updateUserInfo(nickname, newProfileImg, motherLand);
 

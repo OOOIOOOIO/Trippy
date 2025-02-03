@@ -69,7 +69,7 @@ public class TripService {
         }
 
         //d-day추가
-        tripInfoResDto.setDDay(calculateDDay(trip.getDepartureDate(), trip.getArrivalDate()));
+        tripInfoResDto.setDDay(calculateDDay(trip.getDepartureDate()));
 
 
         //여행 계획에 해당하는 날짜 리스트
@@ -171,7 +171,7 @@ public class TripService {
             }
 
             //d-day추가
-            homeTripInfoResDto.setDDay(calculateDDay(trip.getDepartureDate(), trip.getArrivalDate()));
+            homeTripInfoResDto.setDDay(calculateDDay(trip.getDepartureDate()));
 
 
             homeTripInfoResDtoList.add(homeTripInfoResDto);
@@ -198,12 +198,14 @@ public class TripService {
      * 도착일 포함 X
      * eX) 12/1 ~ 12/2 : betweenCnt = 1
      * @param departureDate
-     * @param arrivalDate
      * @return
      */
-    private int calculateDDay(LocalDate departureDate, LocalDate arrivalDate){
+    private int calculateDDay(LocalDate departureDate){
+        LocalDate now = LocalDate.now();
 
-        int betweenCnt = (int)ChronoUnit.DAYS.between(departureDate, arrivalDate);
+        int betweenCnt = (int)ChronoUnit.DAYS.between(now, departureDate);
+
+        if(betweenCnt < 0) return 0;
 
         return betweenCnt;
     }

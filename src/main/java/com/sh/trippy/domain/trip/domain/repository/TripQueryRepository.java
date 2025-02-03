@@ -23,7 +23,7 @@ public class TripQueryRepository {
         return jpaQueryFactory
                 .select(trip)
                 .from(trip)
-                .where(trip.tripId.eq(userId))
+                .where(trip.users.userId.eq(userId))
                 .fetch();
     }
 

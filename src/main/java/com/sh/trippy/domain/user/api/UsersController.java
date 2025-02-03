@@ -94,9 +94,9 @@ public class UsersController {
     @LogTrace
     @PostMapping("/mypage")
     public ResponseEntity<String> saveMypageProfile(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto,
-                                                    @RequestParam("nickname") String nickname,
-                                                    @RequestParam("motherLand") String motherLand,
-                                                    @RequestPart(required = false) MultipartFile file){
+                                                    @RequestParam(name = "nickname") String nickname,
+                                                    @RequestParam(name = "motherLand") String motherLand,
+                                                    @RequestPart(name = "file", required = false) MultipartFile file){
 
         usersService.saveMypageProfile(userInfoFromHeaderDto.getUserId(), nickname, motherLand, file);
 

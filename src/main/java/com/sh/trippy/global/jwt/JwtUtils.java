@@ -23,9 +23,9 @@ public class JwtUtils {
     private final JwtInfoProperties jwtInfoProperties;
     private final ObjectMapper objectMapper;
     private final static String ACCESS_TOKEN = "access_token";
-    private final static String REFRESH_TOKEN = "refresh_token";
+    private final static String REFRESH_TOKEN = "refreshToken";
     private final static String ACCESS_TOKEN_HEADER_NAME = "Authorization";
-    private final static String REFRESH_TOKEN_HEADER_NAME = "refresh_token";
+    private final static String REFRESH_TOKEN_HEADER_NAME = "refreshToken";
     private static final String BEARER = "Bearer ";
 
 
@@ -38,7 +38,9 @@ public class JwtUtils {
         log.info("========= Get AccessToken From Header ==========");
 
         String accessToken = request.getHeader(ACCESS_TOKEN_HEADER_NAME).substring(BEARER.length());
+
         log.info("=========" + accessToken + "===========");
+
         return accessToken;
 //        return request.getHeader(ACCESS_TOKEN_HEADER_NAME).substring(BEARER.length());
 
@@ -49,7 +51,9 @@ public class JwtUtils {
      */
     public String getRefreshTokenFromHeader(HttpServletRequest request) {
         log.info("========= Get RefreshToken From Header ==========");
+
         String refreshToken = request.getHeader(REFRESH_TOKEN_HEADER_NAME);
+
         log.info("=========" + refreshToken + "===========");
 
         return refreshToken;

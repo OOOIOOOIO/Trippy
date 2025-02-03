@@ -13,20 +13,22 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class HomeTripInfoResDto {
 
-    String city;
-    String countryEmogi;
-    LocalDate departureDate;
-    LocalDate arrivalDate;
-    boolean abroadFlag;
-    boolean beenFlag;
-    int companionCnt; // 동반인 n명과 함께~
-    int dDay; // dDay -> 계산
+    private Long tripId;
+    private String city;
+    private String countryEmogi;
+    private LocalDate departureDate;
+    private LocalDate arrivalDate;
+    private boolean abroadFlag;
+    private boolean beenFlag;
+    private int companionCnt; // 동반인 n명과 함께~
+    private int dDay; // dDay -> 계산
     private Double corpLat; // 위도
     private Double corpLon; // 경도
 
     private HomeTripStatusResDto homeTripStatusResDto;
 
     public HomeTripInfoResDto(Trip trip) {
+        this.tripId = trip.getTripId();
         this.city = trip.getCity();
         this.countryEmogi = trip.getCountryEmogi();
         this.departureDate = trip.getDepartureDate();
