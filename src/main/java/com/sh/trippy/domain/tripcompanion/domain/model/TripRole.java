@@ -8,10 +8,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum TripRole {
 
-    GUEST("HOST", "호스트"),
-    USER("GUEST", "게스트");
+    HOST("HOST", "호스트"),
+    GUEST("GUEST", "게스트");
 
-    private final String key;
+    private final String status;
     private final String value;
 
 }

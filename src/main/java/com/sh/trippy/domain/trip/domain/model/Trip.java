@@ -98,6 +98,24 @@ public class Trip extends BaseTimeEntity {
         this.beenFlag = !beenFlag;
     }
 
+
+    /**
+     * 양방향 연관관계, cascade 유의
+     */
+//    public void addBigGoal(BigGoal bigGoal){
+//        if(bigGoal.getUsers() != null){
+//            bigGoal.getUsers().getBigGoalList().remove(bigGoal);
+//        }
+//        this.bigGoalList.add(bigGoal);
+//        bigGoal.setUsers(this);
+//    }
+    public void addTripCompanion(TripCompanion tripCompanion) {
+        if(tripCompanion.getTrip() != null){
+            tripCompanion.getTrip().getTripCompanionList().remove(tripCompanion);
+        }
+
+        this.getTripCompanionList().add(tripCompanion);
+    }
 }
 
 

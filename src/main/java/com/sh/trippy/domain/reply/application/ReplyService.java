@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @Transactional
@@ -54,7 +53,7 @@ public class ReplyService {
      */
     public void createReply(Long tripId, ReplyCreateReqDto replyCreateReqDto, UserInfoFromHeaderDto userInfoFromHeaderDto) {
         Users users = usersRepository.findById(userInfoFromHeaderDto.getUserId()).orElseThrow(() -> new CustomException(CustomErrorCode.UserNotFoundException));
-        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistTrip));
+        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistTripException));
 
         Reply reply = Reply.createReply(replyCreateReqDto, trip, users);
 
@@ -70,7 +69,7 @@ public class ReplyService {
      * 댓글 삭제
      */
     public void deleteReply(Long replyId){
-        Reply reply = replyRepository.findById(replyId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistTripReply));
+        Reply reply = replyRepository.findById(replyId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistTripReplyException));
 
         replyRepository.delete(reply);
 

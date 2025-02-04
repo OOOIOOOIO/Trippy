@@ -31,11 +31,13 @@ public enum CustomErrorCode {
     FailToDeleteFileS3Exception(INTERNAL_SERVER_ERROR, "S001", "S3 file delete에 실패하였습니다."),
     FailToSaveFileInRedisException(INTERNAL_SERVER_ERROR,"S002", "redis에 데이터 저장을 실패하였습니다."),
     FailToDeleteFIleInRedisException(INTERNAL_SERVER_ERROR, "S003", "redis에서 데이터 삭제를 실패하였습니다."),
-    NotExistTrip(INTERNAL_SERVER_ERROR, "S004", "해당 여행이 존재하지 않습니다."),
-    NotExistPlan (INTERNAL_SERVER_ERROR, "S004", "해당 계획이 존재하지 않습니다."),
-    NotExistRule(INTERNAL_SERVER_ERROR, "S005", "해당 목표의 규칙이 존재하지 않습니다."),
-    NotExistTripReply(INTERNAL_SERVER_ERROR, "S006", "해당 후기가 존재하지 않습니다."),
-    NotExistDelayGoal(INTERNAL_SERVER_ERROR, "S007", "연기된 목표가 존재하지 않습니다."),
+    NotExistTripException(INTERNAL_SERVER_ERROR, "S004", "해당 여행이 존재하지 않습니다."),
+    NotExistPlanException(INTERNAL_SERVER_ERROR, "S004", "해당 계획이 존재하지 않습니다."),
+    NotExistRuleException(INTERNAL_SERVER_ERROR, "S005", "해당 목표의 규칙이 존재하지 않습니다."),
+    NotExistTripReplyException(INTERNAL_SERVER_ERROR, "S006", "해당 후기가 존재하지 않습니다."),
+    NotExistCompanionException(INTERNAL_SERVER_ERROR, "S007", "해당 동반자가 존재하지 않습니다."),
+    NotExistInvitationException(INTERNAL_SERVER_ERROR, "S008", "해당 초대가 존재하지 않습니다."),
+
 
 
 

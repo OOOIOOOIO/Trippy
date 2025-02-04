@@ -54,7 +54,7 @@ public class PlanService {
      * 계획 생성
      */
     public void createTripPlan(Long tripId, PlanCreateReqDto planCreateReqDto){
-        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistTrip));
+        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistTripException));
         Plan plan = Plan.createPlan(planCreateReqDto, trip);
 
         planRepository.save(plan);
@@ -66,7 +66,7 @@ public class PlanService {
      * 계획 수정
      */
     public void updateTripPlan(Long planId, PlanUpdateReqDto planUpdateReqDto){
-        Plan plan = planRepository.findById(planId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistPlan));
+        Plan plan = planRepository.findById(planId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistPlanException));
 
         plan.updatePlan(planUpdateReqDto);
 
@@ -78,7 +78,7 @@ public class PlanService {
      * 계획 삭제
      */
     public void deleteTripPlan(Long planId){
-        Plan plan = planRepository.findById(planId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistPlan));
+        Plan plan = planRepository.findById(planId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistPlanException));
 
         planRepository.delete(plan);
     }
@@ -87,7 +87,7 @@ public class PlanService {
      * 완료여부 설정
      */
     public void updateCompleteStatus(Long planId){
-        Plan plan = planRepository.findById(planId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistPlan));
+        Plan plan = planRepository.findById(planId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistPlanException));
 
         plan.updateCompleteStatus(plan.getCompleteStatus());
     }

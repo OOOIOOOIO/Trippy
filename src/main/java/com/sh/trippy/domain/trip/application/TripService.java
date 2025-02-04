@@ -1,7 +1,6 @@
 package com.sh.trippy.domain.trip.application;
 
 import com.sh.trippy.api.home.controller.dto.HomeTripInfoResDto;
-import com.sh.trippy.api.home.controller.dto.HomeTripStatusResDto;
 import com.sh.trippy.domain.plan.domain.repository.PlanRepository;
 import com.sh.trippy.domain.trip.api.dto.req.TripCreateReqDto;
 import com.sh.trippy.domain.trip.api.dto.req.TripUpdateReqDto;
@@ -12,6 +11,7 @@ import com.sh.trippy.domain.trip.domain.model.Trip;
 import com.sh.trippy.domain.trip.domain.repository.TripQueryRepository;
 import com.sh.trippy.domain.trip.domain.repository.TripRepository;
 import com.sh.trippy.domain.tripcompanion.domain.model.TripCompanion;
+import com.sh.trippy.domain.tripcompanion.domain.model.TripRole;
 import com.sh.trippy.domain.user.domain.Users;
 import com.sh.trippy.domain.user.domain.repository.UsersRepository;
 import com.sh.trippy.global.exception.CustomErrorCode;
@@ -46,7 +46,7 @@ public class TripService {
     @LogTrace
     public TripGetInfoResDto getTripInfo(UserInfoFromHeaderDto userInfoFromHeaderDto, Long tripId){
         //여행 정보
-        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistTrip));
+        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistTripException));
 
         TripInfoResDto tripInfoResDto = new TripInfoResDto(trip);
 
@@ -96,6 +96,9 @@ public class TripService {
 
         Trip trip = Trip.createTrip(tripCreateReqDto, user);
 
+        // 여행 최초 생성시 동반자에 자신(Host) 추가
+        trip.addTripCompanion(TripCompanion.createTripCompanion(TripRole.HOST, trip, user));
+
         tripRepository.save(trip);
 
     }
@@ -106,7 +109,7 @@ public class TripService {
      */
     @LogTrace
     public void updateTrip(Long tripId, TripUpdateReqDto tripUpdateReqDto) {
-        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistTrip));
+        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistTripException));
 
         trip.updateTrip(tripUpdateReqDto);
     }
@@ -116,7 +119,7 @@ public class TripService {
      */
     @LogTrace
     public void deleteTrip(Long tripId){
-        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistTrip));
+        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistTripException));
 
         tripRepository.delete(trip);
 
@@ -127,7 +130,7 @@ public class TripService {
      */
     @LogTrace
     public void updateBeenFlag(Long tripId){
-        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistTrip));
+        Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistTripException));
 
         trip.updateBeenFlag(trip.isBeenFlag());
 
