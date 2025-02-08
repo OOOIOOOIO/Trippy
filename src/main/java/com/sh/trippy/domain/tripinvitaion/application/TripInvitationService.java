@@ -14,6 +14,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -25,22 +28,18 @@ public class TripInvitationService {
     private final UsersRepository usersRepository;
 
 
-
-
     /**
      * Host가 Guest 초대하기
      */
     public void inviteGuest(UserInfoFromHeaderDto userInfoFromHeaderDto, Long tripId, String nickname) {
-        Users usersTo = usersRepository.findByNickname(nickname).orElseThrow(() -> new CustomException(CustomErrorCode.UserNotFoundException));
+        Users receivedUser = usersRepository.findByNickname(nickname).orElseThrow(() -> new CustomException(CustomErrorCode.UserNotFoundException));
         Trip trip = tripRepository.findById(tripId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistTripException));
 
-        Long userFrom = userInfoFromHeaderDto.getUserId();
+        Long sendUserId = userInfoFromHeaderDto.getUserId();
 
-        TripInvitation tripInvitation = TripInvitation.createTripInvitaion(trip, userFrom, usersTo.getUserId());
+        TripInvitation tripInvitation = TripInvitation.createTripInvitaion(trip, sendUserId, receivedUser.getUserId());
 
         tripInvitationRepository.save(tripInvitation);
-
-
 
 
     }
@@ -48,7 +47,7 @@ public class TripInvitationService {
 
 
     /**
-     * Host가 Guest 초대 취소하기
+     * Host가 Guest 초대 취소하기 or Geust가 Host의 초대 거절하기
      */
     public void deleteInvitation(Long invitationId) {
         TripInvitation tripInvitation = tripInvitationRepository.findById(invitationId).orElseThrow(() -> new CustomException(CustomErrorCode.NotExistInvitationException));
@@ -57,28 +56,36 @@ public class TripInvitationService {
     }
 
 
-    /**
-     * Guest가 Host의 초대 수락하기
-     */
-
-
-
-    /**
-     * Geust가 Host의 초대 거절하기
-     */
-
 
 
     /**
      * Host의 초대한 내역 보기
      */
+    public void getSendInvitationList(UserInfoFromHeaderDto userInfoFromHeaderDto) {
+        List<TripInvitation> tripInvitationList = tripInvitationRepository.findByUserFrom(userInfoFromHeaderDto.getUserId());
+
+        for (TripInvitation tripInvitation : tripInvitationList) {
+            Long receivedUserId = tripInvitation.getReceivedUserId();
+            Optional<Users> users = usersRepository.findById(receivedUserId);
+
+            // 존재할 때만, 탈퇴한 유저라면 패스
+            if(users.isPresent()){
+                // 닉네임, 프로필 이미지, 초대수락상태
+            }
+
+        }
+    }
+
 
 
 
     /**
      * GUEST의 초대받은 내역 보기
      */
+    public void getReceiveInvitationList(UserInfoFromHeaderDto userInfoFromHeaderDto) {
+        List<TripInvitation> tripInvitedList = tripInvitationRepository.findByUserTo(userInfoFromHeaderDto.getUserId());
 
+    }
 
 
 

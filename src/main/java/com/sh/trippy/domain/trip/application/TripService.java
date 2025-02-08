@@ -89,6 +89,9 @@ public class TripService {
 
     /**
      * 여행 생성
+     *
+     * user의 paidFlag가 1(true)일 경우에만 HOST넣기
+     * 그리고 유저가 유료버전을 구매할 경우 HOST로 넣기
      */
     @LogTrace
     public void createTrip(UserInfoFromHeaderDto userInfoFromHeaderDto, TripCreateReqDto tripCreateReqDto){
@@ -96,8 +99,11 @@ public class TripService {
 
         Trip trip = Trip.createTrip(tripCreateReqDto, user);
 
-        // 여행 최초 생성시 동반자에 자신(Host) 추가
-        trip.addTripCompanion(TripCompanion.createTripCompanion(TripRole.HOST, trip, user));
+        // 여행 최초 생성시 유료버전이라면 동반자에 자신(Host) 추가
+        if(user.isPaidFlag()){
+            trip.addTripCompanion(TripCompanion.createTripCompanion(TripRole.HOST, trip, user));
+        }
+
 
         tripRepository.save(trip);
 

@@ -20,25 +20,25 @@ public class TripInvitation {
     @JoinColumn(name = "trip")
     private Trip trip;
 
-    private Long userFrom; // host
-    private Long userTo; // guest
+    private Long sendUserId; // host
+    private Long receivedUserId; // guest
     private InvitationStatus invitationStatus;
 
     @Builder
-    private TripInvitation(Trip trip, Long userFrom, Long userTo) {
+    private TripInvitation(Trip trip, Long sendUserId, Long receivedUserId) {
         this.trip = trip;
-        this.userFrom = userFrom;
-        this.userTo = userTo;
+        this.sendUserId = sendUserId;
+        this.receivedUserId = receivedUserId;
         this.invitationStatus = InvitationStatus.WAIT; // 초기는 WAIT
 
     }
 
-    public static TripInvitation createTripInvitaion(Trip trip, Long userFrom, Long userTo){
+    public static TripInvitation createTripInvitaion(Trip trip, Long sendUserId, Long receivedUserId){
 
         return TripInvitation.builder()
                 .trip(trip)
-                .userFrom(userFrom)
-                .userTo(userTo)
+                .sendUserId(sendUserId)
+                .receivedUserId(receivedUserId)
                 .build();
     }
 }

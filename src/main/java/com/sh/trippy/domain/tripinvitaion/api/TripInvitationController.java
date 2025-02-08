@@ -51,18 +51,18 @@ public class TripInvitationController {
 
 
     /**
-     * Host가 Guest 초대 취소하기
+     * Host가 Guest 초대 취소하기 or Geust가 Host의 초대 거절하기
      */
     @Operation(
-            summary = "Host가 Guest 초대하기 API",
-            description = "Host가 Guest 초대하기"
+            summary = "Host가 Guest 초대 취소하기 or Geust가 Host의 초대 거절하기 API",
+            description = "Host가 Guest 초대 취소하기 or Geust가 Host의 초대 거절하기"
     )
     @ApiResponse(
             responseCode = "200",
-            description = "Host가 Guest 초대하기 후 success 리턴"
+            description = "Host가 Guest 초대 취소 or Geust가 Host의 초대 거절하기 후 success 리턴"
     )
     @LogTrace
-    @PostMapping("/{invitation}")
+    @DeleteMapping("/{invitation}")
     public ResponseEntity<String> deleteInvitation(@PathVariable(name = "invitation") Long invitationId) {
 
         tripInvitationService.deleteInvitation(invitationId);
@@ -72,15 +72,51 @@ public class TripInvitationController {
 
 
 
+    /**
+     * Host로써 초대한 내역 보기
+     */
+    @Operation(
+            summary = "Host로써 초대한 내역 보기 API",
+            description = "Host로써 초대한 내역 보기"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "Host로써 초대한 내역 조회 후 초대내역 List로 리턴"
+    )
+    @LogTrace
+    @GetMapping("/sending")
+    public ResponseEntity<String> getSendInvitationList(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto) {
 
+        tripInvitationService.getSendInvitationList(userInfoFromHeaderDto);
 
+        // firebase로 GUEST한테 알림 보내기
 
+        return new ResponseEntity<>("success", HttpStatus.OK);
+    }
 
 
 
     /**
-     * Geust가 Host의 초대 거절하기
+     * GUEST로써 초대받은 내역 보기
      */
+    @Operation(
+            summary = "GUEST로써 초대받은 내역 보기 API",
+            description = "GUEST로써 초대받은 내역 보기"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "GUEST로써 초대받은 내역 조회 후 초대내역 List로 리턴"
+    )
+    @LogTrace
+    @GetMapping("/receiving")
+    public ResponseEntity<String> getReceiveInvitationList(@UserInfoFromHeader UserInfoFromHeaderDto userInfoFromHeaderDto) {
+
+        tripInvitationService.getReceiveInvitationList(userInfoFromHeaderDto);
+
+        // firebase로 GUEST한테 알림 보내기
+
+        return new ResponseEntity<>("success", HttpStatus.OK);
+    }
 
 
 
