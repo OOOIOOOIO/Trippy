@@ -19,9 +19,11 @@ public class GoogleLoginService {
     private final UsersService usersService;
     private static final String PROVIDER = "google";
 
-    public int googleLogin(String accessToken) throws ParseException, JsonProcessingException {
+    public int googleLogin(String idToken) throws ParseException, JsonProcessingException {
 
-        String email = googleLoginClient.getGoogleUserInfo(accessToken);
+
+
+        String email = googleLoginClient.getGoogleUserInfo(idToken);
 
         return usersService.saveGoogleUser(email, PROVIDER);
 
